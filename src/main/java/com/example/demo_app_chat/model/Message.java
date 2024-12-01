@@ -3,6 +3,7 @@ package com.example.demo_app_chat.model;
 import jakarta.persistence.Id;
 import lombok.*;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.web.service.annotation.GetExchange;
 
 import java.util.Date;
 
