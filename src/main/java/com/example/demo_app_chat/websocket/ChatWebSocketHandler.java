@@ -1,4 +1,4 @@
-package com.example.demo_app_chat;
+package com.example.demo_app_chat.websocket;
 
 import com.example.demo_app_chat.model.Message;
 import com.example.demo_app_chat.repository.MessageRepository;

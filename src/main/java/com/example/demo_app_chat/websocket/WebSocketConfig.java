@@ -1,4 +1,4 @@
-package com.example.demo_app_chat;
+package com.example.demo_app_chat.websocket;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,6 +15,7 @@ public class WebSocketConfig implements WebSocketConfigurer {
         registry.addHandler(getChatWebSocketHandler(), "/chat")
                 .setAllowedOrigins("*");  // Cho phép tất cả các nguồn (client)
         registry.addHandler(getPushNotificationHandler(), "/notifications").setAllowedOrigins("*");
+        registry.addHandler(getChatFileWebSocketHandler(),"/uploadfile").setAllowedOrigins("*");
     }
 
     @Bean
@@ -25,5 +26,7 @@ public class WebSocketConfig implements WebSocketConfigurer {
     public ChatWebSocketHandler getChatWebSocketHandler() {
         return new ChatWebSocketHandler();
     }
+    @Bean
+    public ChatFileWebSocketHandler getChatFileWebSocketHandler() {return new ChatFileWebSocketHandler();}
 }
 

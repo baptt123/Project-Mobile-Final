@@ -1,12 +1,8 @@
-package com.example.demo_app_chat;
+package com.example.demo_app_chat.websocket;
 
-import com.example.demo_app_chat.controller.NotificationController;
 import com.example.demo_app_chat.model.Notifications;
 import com.example.demo_app_chat.repository.NotificationRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sun.nio.sctp.HandlerResult;
-import com.sun.nio.sctp.Notification;
-import com.sun.nio.sctp.NotificationHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
