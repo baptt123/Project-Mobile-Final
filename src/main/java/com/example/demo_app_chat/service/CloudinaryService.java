@@ -2,9 +2,11 @@ package com.example.demo_app_chat.service;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
+import com.example.demo_app_chat.model.Message;
 import com.example.demo_app_chat.model.Post;
 import com.example.demo_app_chat.model.Story;
 import com.example.demo_app_chat.model.UserInfo;
+import com.example.demo_app_chat.repository.MessageRepository;
 import com.example.demo_app_chat.repository.PostRepository;
 import com.example.demo_app_chat.repository.StoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,17 +24,20 @@ import java.util.UUID;
 @Service
 public class CloudinaryService {
 
-    private static final String CLOUD_NAME = "dllqdawgo";
-    private static final String API_KEY = "518211464238961";
-    private static final String API_SECRET = "D7rrw9Zz5E5JGRSNADfblVPprtQ";
+    public static final String CLOUD_NAME = "dllqdawgo";
+    public static final String API_KEY = "518211464238961";
+    public static final String API_SECRET = "D7rrw9Zz5E5JGRSNADfblVPprtQ";
     @Autowired
     private final PostRepository postRepository;
     @Autowired
     private final StoryRepository storyRepository;
+    @Autowired
+    private final MessageRepository messageRepository;
 
-    public CloudinaryService(PostRepository postRepository, StoryRepository storyRepository) {
+    public CloudinaryService(PostRepository postRepository, StoryRepository storyRepository, MessageRepository messageRepository) {
         this.postRepository = postRepository;
         this.storyRepository = storyRepository;
+        this.messageRepository = messageRepository;
     }
 
     public String uploadFileAndSaveStory(MultipartFile file) throws Exception {
@@ -116,7 +121,7 @@ public class CloudinaryService {
     }
 
     // Phương thức chuyển MultipartFile thành File tạm thời
-    private File convertMultipartFileToFile(MultipartFile file) throws IOException {
+    public File convertMultipartFileToFile(MultipartFile file) throws Exception {
         File convFile = new File(file.getOriginalFilename());
         FileOutputStream fos = new FileOutputStream(convFile);
         fos.write(file.getBytes());
@@ -124,4 +129,7 @@ public class CloudinaryService {
         return convFile;
     }
 
+
 }
+
+

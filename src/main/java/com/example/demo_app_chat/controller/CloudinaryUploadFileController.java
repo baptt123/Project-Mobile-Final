@@ -1,19 +1,24 @@
 package com.example.demo_app_chat.controller;
 
+import com.example.demo_app_chat.model.Message;
 import com.example.demo_app_chat.service.CloudinaryService;
+import com.example.demo_app_chat.service.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Map;
+
 @RestController
-@RequestMapping("/api/getdata")
+@RequestMapping("/api/uploadfile")
 public class CloudinaryUploadFileController {
     @Autowired
     private final CloudinaryService cloudinaryService;
-
     public CloudinaryUploadFileController(CloudinaryService cloudinaryService) {
         this.cloudinaryService = cloudinaryService;
+
     }
 
     @PostMapping("/uploadfile")
@@ -43,4 +48,7 @@ public class CloudinaryUploadFileController {
 
 
     }
-}
+
+
+    }
+

@@ -16,4 +16,8 @@ public class Notifications {
 //    private int idPost;
 //    private int idSenderUser;
     private String action;
+
+    public void save(Notifications notification) {
+
+    }
 }

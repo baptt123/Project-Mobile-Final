@@ -2,6 +2,7 @@ package com.example.demo_app_chat.controller;
 
 import com.example.demo_app_chat.model.Story;
 import com.example.demo_app_chat.repository.StoryRepository;
+import com.example.demo_app_chat.service.StoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,11 +15,11 @@ import java.util.List;
 @RequestMapping("/api/story")
 public class StoryController {
     @Autowired
-    private StoryRepository storyRepository;
+    private StoryService storyService;
 
     @GetMapping("/getstories")
     public ResponseEntity<List<Story>> getStories() {
-        List<Story> stories = storyRepository.findAll();
+        List<Story> stories = (List<Story>) storyService.findAll();
         if (stories == null) {
             return ResponseEntity.noContent().build();
         }
