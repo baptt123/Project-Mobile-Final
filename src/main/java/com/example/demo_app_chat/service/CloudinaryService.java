@@ -92,8 +92,8 @@ public class CloudinaryService {
             Map<String, Object> fileupload = ObjectUtils.asMap(
                     "use_filename", true,
                     "unique_filename", false,
-                    "overwrite", true,
-                    "resource_type", "video" // Đảm bảo upload video
+                    "overwrite", true
+//                    "resource_type", "video" // Đảm bảo upload video
             );
 
             // Upload file lên Cloudinary
