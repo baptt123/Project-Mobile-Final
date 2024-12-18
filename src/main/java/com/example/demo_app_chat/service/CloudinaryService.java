@@ -2,7 +2,6 @@ package com.example.demo_app_chat.service;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
-import com.example.demo_app_chat.model.Message;
 import com.example.demo_app_chat.model.Post;
 import com.example.demo_app_chat.model.Story;
 import com.example.demo_app_chat.model.UserInfo;

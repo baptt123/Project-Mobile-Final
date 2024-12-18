@@ -12,7 +12,7 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Document("message")
-public class Message {
+public class Messages {
     @Id
     private int id;
     private String message;

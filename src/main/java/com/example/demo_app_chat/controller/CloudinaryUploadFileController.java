@@ -1,6 +1,5 @@
 package com.example.demo_app_chat.controller;
 
-import com.example.demo_app_chat.model.Message;
 import com.example.demo_app_chat.service.CloudinaryService;
 import com.example.demo_app_chat.service.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -77,6 +76,10 @@ public class CloudinaryUploadFileController {
 
     @GetMapping(value = "/sse/share", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public Flux<String> shareEvents() {
+        return sink.asFlux().delayElements(Duration.ofMillis(100));
+    }
+    @GetMapping(value="/sse/follow",produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    public Flux<String> followEvents(){
         return sink.asFlux().delayElements(Duration.ofMillis(100));
     }
 }

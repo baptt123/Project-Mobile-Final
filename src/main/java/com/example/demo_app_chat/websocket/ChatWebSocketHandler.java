@@ -2,7 +2,7 @@ package com.example.demo_app_chat.websocket;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
-import com.example.demo_app_chat.model.Message;
+import com.example.demo_app_chat.model.Messages;
 import com.example.demo_app_chat.repository.MessageRepository;
 import com.example.demo_app_chat.service.CloudinaryService;
 import com.example.demo_app_chat.service.MessageService;
@@ -49,25 +49,27 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
 
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
-//        String username = session.getUri().getQuery(); // Lấy tên người dùng từ query param
-//        if (username != null) {
-        // Kiểm tra xem người gửi có trong map hay không
         String msgContent = message.getPayload();
-//            System.out.println("Received message from " + username + ": " + msgContent);
-        System.out.println(msgContent);
+        System.out.println("Received message: " + msgContent);
+
+        // Chuyển đổi tin nhắn từ JSON sang đối tượng Message
         ObjectMapper objectMapper = new ObjectMapper();
-        Message getMessage = objectMapper.readValue(msgContent, Message.class);
-        // Nếu muốn gửi tin nhắn cho tất cả người dùng, bạn có thể lặp qua tất cả các session trong userSessions
+        Messages getMessage = objectMapper.readValue(msgContent, Messages.class);
+
+        // Lưu tin nhắn vào cơ sở dữ liệu hoặc thực hiện các thao tác khác với tin nhắn nếu cần
+        messageService.save(getMessage);
+
+        // Gửi tin nhắn đến tất cả các client kết nối
         for (Map.Entry<String, WebSocketSession> entry : userSessions.entrySet()) {
             WebSocketSession wsSession = entry.getValue();
             if (wsSession.isOpen()) {
-//                wsSession.sendMessage(new TextMessage(username + ": " + msgContent));
-//                messageRepository.save(getMessage);
+                // Gửi tin nhắn cho tất cả các client (bao gồm cả người gửi)
                 messageService.save(getMessage);
                 wsSession.sendMessage(new TextMessage(msgContent));
             }
         }
     }
+
 
 //    @Override
 //    protected void handleBinaryMessage(WebSocketSession session, BinaryMessage message) {

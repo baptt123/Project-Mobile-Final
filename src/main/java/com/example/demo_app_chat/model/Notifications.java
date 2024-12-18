@@ -17,7 +17,5 @@ public class Notifications {
 //    private int idSenderUser;
     private String action;
 
-    public void save(Notifications notification) {
 
-    }
 }
