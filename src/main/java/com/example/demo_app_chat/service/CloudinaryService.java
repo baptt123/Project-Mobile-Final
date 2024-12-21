@@ -72,9 +72,9 @@ public class CloudinaryService {
             Random rand = new Random();
             // Lấy URL của file đã upload
             String fileUrl = (String) uploadResult.get("url");
-            Story story = Story.builder().id(rand.nextInt(10000)).imageStory(fileUrl).idUser(rand.nextInt(10)).build();
+            Story story = Story.builder().id(UUID.randomUUID().toString()).imageStory(fileUrl).idUser(rand.nextInt(10)).build();
             storyRepository.save(story);
-            Notifications notifications=Notifications.builder().id(new Random().nextInt(10000)).action("New notification at"+new Date()).idUser(new Random().nextInt(1000)).build();
+            Notifications notifications=Notifications.builder().id(UUID.randomUUID().toString()).action("New notification at"+new Date()).idUser(new Random().nextInt(1000)).build();
             notificationRepository.save(notifications);
             return fileUrl;
         } catch (IOException e) {
@@ -116,9 +116,9 @@ public class CloudinaryService {
             UserInfo user = UserInfo.builder().userName(userName).profileImagePath("temp_link").build();
             Post post = Post.builder().user(user).media(fileUrl).caption(caption)
                     .likeCount(1).saveCount(2).isSaved(2).isLike(1).shareCount(2)
-                    .comments(null).id(new Random().nextInt(1000)).build();
+                    .comments(null).build();
             postRepository.save(post);
-            Notifications notifications=Notifications.builder().id(new Random().nextInt(10000)).action("New notification at"+new Date()).idUser(new Random().nextInt(1000)).build();
+            Notifications notifications=Notifications.builder().id(UUID.randomUUID().toString()).action("New notification at"+new Date()).idUser(new Random().nextInt(1000)).build();
 //            notificationService.save(notifications);
             notificationRepository.save(notifications);
             return fileUrl;

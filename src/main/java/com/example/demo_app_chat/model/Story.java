@@ -11,7 +11,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document("story")
 public class Story {
     @Id
-    private int id;
+    private String id;
     private int idUser; // ID của người đăng story
     private String imageStory; // Đường dẫn ảnh
 //    private String caption; // Mô tả story

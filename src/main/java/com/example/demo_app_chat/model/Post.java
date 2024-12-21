@@ -5,6 +5,7 @@ import lombok.*;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.List;
+import java.util.UUID;
 
 @Builder
 @Setter
@@ -14,8 +15,7 @@ import java.util.List;
 @Document("post")
 public class Post {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private String id= UUID.randomUUID().toString();
     @Embedded
     private UserInfo user;
     private String caption;

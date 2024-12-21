@@ -14,7 +14,7 @@ import java.util.Date;
 @Document("message")
 public class Messages {
     @Id
-    private int id;
+    private String id;
     private String message;
     private Date sendingDate;
     private int idSender;
