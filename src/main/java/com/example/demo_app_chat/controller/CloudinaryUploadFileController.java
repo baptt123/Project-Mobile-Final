@@ -50,6 +50,7 @@ public class CloudinaryUploadFileController {
         try {
             String fileUrl = cloudinaryService.uploadFileAndSaveStory(file);
             System.out.println(fileUrl);
+            sink.tryEmitNext("1");
             return ResponseEntity.ok(fileUrl);
         } catch (Exception e) {
             return ResponseEntity.status(500).body("Upload file that bai");
