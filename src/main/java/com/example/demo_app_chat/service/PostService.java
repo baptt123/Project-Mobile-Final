@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PostService {
@@ -25,6 +26,6 @@ public class PostService {
         return postDTOs;
     }
     public Post getPostById(String id) {
-        return postRepository.findByID(id);
+        return postRepository.findById(id).orElse(new Post());
     }
 }
