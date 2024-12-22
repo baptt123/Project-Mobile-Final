@@ -1,6 +1,5 @@
 package com.example.demo_app_chat.controller;
 
-import com.example.demo_app_chat.dto.StoryDTO;
 import com.example.demo_app_chat.model.Story;
 import com.example.demo_app_chat.repository.StoryRepository;
 import com.example.demo_app_chat.service.StoryService;
@@ -17,8 +16,14 @@ import java.util.List;
 public class StoryController {
     @Autowired
     private StoryService storyService;
+
     @GetMapping("/getstories")
-    public List<StoryDTO> getStories() {
-        return storyService.getAllStory();
+    public ResponseEntity<List<Story>> getStories() {
+        List<Story> stories = (List<Story>) storyService.findAll();
+        if (stories == null) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(stories);
+
     }
 }

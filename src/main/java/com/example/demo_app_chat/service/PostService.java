@@ -25,6 +25,6 @@ public class PostService {
         return postDTOs;
     }
     public Post getPostById(String id) {
-        return postRepository.findByID(id);
+        return (Post) postRepository.findById(id).orElse(null);
     }
 }

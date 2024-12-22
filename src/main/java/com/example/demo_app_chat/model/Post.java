@@ -15,7 +15,7 @@ import java.util.UUID;
 @Document("post")
 public class Post {
     @Id
-    private String id= UUID.randomUUID().toString();
+ String id = UUID.randomUUID().toString();
     @Embedded
     private UserInfo user;
     private String caption;
