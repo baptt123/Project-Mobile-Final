@@ -34,20 +34,10 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
 
     // Lưu trữ các session WebSocket theo ID người dùng
     private final Map<UserSession, WebSocketSession> userSessions = new HashMap<>();
-//    public Cloudinary cloudinary = new Cloudinary(ObjectUtils.asMap(
-//            "cloud_name", CloudinaryService.CLOUD_NAME,
-//            "api_key", CloudinaryService.API_KEY,
-//            "api_secret", CloudinaryService.API_SECRET
-//    ));
+
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
-        // Khi kết nối mới, gán session cho một ID người dùng
-//        String username = session.getUri().getQuery(); // Giả sử client gửi tên người dùng trong query param (ví dụ: ws://localhost:8080/chat?username=John)
-//        if (username != null && !username.isEmpty()) {
-//            userSessions.put(username, session);
-//            System.out.println("User " + username + " connected");
-//        }
-//        userSessions.put(session.getId(), session);
+        //thiet lap ket noi session
         String username = (String) session.getAttributes().get("username");
         if (username != null && !username.isEmpty()) {
             userSessions.put(UserSession.builder().username(username).build(), session);
@@ -67,80 +57,36 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
             // Chuyển đổi tin nhắn JSON sang đối tượng Messages
             ObjectMapper objectMapper = new ObjectMapper();
             Messages getMessage = objectMapper.readValue(msgContent, Messages.class);
-
+            //Map luu tru du lieu cua json
+            Map<String,Object> convertJSON=objectMapper.convertValue(getMessage, Map.class);
+            String userNameReceiver=convertJSON.get("userNameReceiver").toString();
             // Lặp qua tất cả các session và gửi tin nhắn
             for (Map.Entry<UserSession, WebSocketSession> entry : userSessions.entrySet()) {
-                WebSocketSession wsSession = entry.getValue();
-                if (wsSession.isOpen()) {
-                    // Lưu tin nhắn vào cơ sở dữ liệu
-                    messageService.save(getMessage);
-
-                    // Gửi tin nhắn kèm theo tên người gửi
-                    wsSession.sendMessage(new TextMessage(msgContent));
+                    if(entry.getKey().getUsername().equals(userNameReceiver)) {
+                        messageService.save(getMessage);
+                        entry.getValue().sendMessage(new TextMessage(msgContent));
+                    }else{
+                        messageService.save(getMessage);
                 }
+                    break;
             }
         }
     }
 
 
-//    @Override
-//    protected void handleBinaryMessage(WebSocketSession session, BinaryMessage message) {
-//        try {
-//            // Lấy dữ liệu tệp từ BinaryMessage
-//            byte[] fileData = message.getPayload().array();
-//
-//            // Tạo InputStream từ dữ liệu tệp đã nhận
-//            InputStream inputStream = new ByteArrayInputStream(fileData);
-//
-//            // Upload tệp lên Cloudinary
-//            Map uploadResult = cloudinary.uploader().upload(inputStream, ObjectUtils.emptyMap());
-//
-//            // Lấy URL của tệp đã upload
-//            String fileUrl = uploadResult.get("secure_url").toString();
-//
-//            // Tạo một số ngẫu nhiên để làm ID cho tin nhắn và người gửi
-//            Random random = new Random();
-//            int randomNum = random.nextInt(100000);
-//
-//            // Lấy ngày giờ hiện tại để lưu vào tin nhắn
-//            LocalDateTime localDateTime = LocalDateTime.now();
-//            Date date = Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant());
-//
-//            // Tạo một tin nhắn mới với URL tệp
-//            Message fileMessage = Message.builder()
-//                    .id(randomNum)
-//                    .message(fileUrl)
-//                    .sendingDate(date)
-//                    .idReceipt(randomNum)
-//                    .idSender(randomNum)
-//                    .build();
-//
-//            // Lưu tin nhắn vào MongoDB
-//            messageRepository.save(fileMessage);
-//
-//            // Gửi thông báo tới các client khác về tệp đã được upload
-//            for (Map.Entry<String, WebSocketSession> entry : userSessions.entrySet()) {
-//                WebSocketSession wsSession = entry.getValue();
-//                if (wsSession.isOpen()) {
-//                    wsSession.sendMessage(new TextMessage("File uploaded: " + fileUrl));
-//                }
-//            }
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//    }
+
 
 
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
-        // Retrieve the username from the session attributes
+        // lay username tu websocketsession
         String username = (String) session.getAttributes().get("username");
 
         if (username != null) {
-            // Find the UserSession object corresponding to the username
+            // bien luu tru usersession de xoa
             UserSession userSessionToRemove = null;
 
-            // Iterate through the userSessions map to find the session associated with this username
+            // duyet qua map neu thoa dieu kien thi luu tru
             for (Map.Entry<UserSession, WebSocketSession> entry : userSessions.entrySet()) {
                 if (entry.getKey().getUsername().equals(username)) {
                     userSessionToRemove = entry.getKey();
@@ -148,7 +94,7 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
                 }
             }
 
-            // Remove the UserSession from the map
+            // xoa session khoi map
             if (userSessionToRemove != null) {
                 userSessions.remove(userSessionToRemove);
                 System.out.println("User " + username + " disconnected");
