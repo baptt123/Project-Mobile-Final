@@ -3,9 +3,12 @@ package com.example.demo_app_chat.websocket;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import com.example.demo_app_chat.model.Message;
+import com.example.demo_app_chat.model.Messages;
+import com.example.demo_app_chat.model.User;
+import com.example.demo_app_chat.model.UserSession;
 import com.example.demo_app_chat.repository.MessageRepository;
 import com.example.demo_app_chat.service.CloudinaryService;
-import com.example.demo_app_chat.service.MessageService;
+import com.example.demo_app_chat.service.MessagesService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.socket.BinaryMessage;
@@ -27,10 +30,10 @@ import java.util.Random;
 
 public class ChatWebSocketHandler extends TextWebSocketHandler {
     @Autowired
-    private MessageService messageService;
+    private MessagesService messageService;
 
     // Lưu trữ các session WebSocket theo ID người dùng
-    private final Map<String, WebSocketSession> userSessions = new HashMap<>();
+    private final Map<UserSession, WebSocketSession> userSessions = new HashMap<>();
 //    public Cloudinary cloudinary = new Cloudinary(ObjectUtils.asMap(
 //            "cloud_name", CloudinaryService.CLOUD_NAME,
 //            "api_key", CloudinaryService.API_KEY,
@@ -44,30 +47,41 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
 //            userSessions.put(username, session);
 //            System.out.println("User " + username + " connected");
 //        }
-        userSessions.put(session.getId(), session);
+//        userSessions.put(session.getId(), session);
+        String username = (String) session.getAttributes().get("username");
+        if (username != null && !username.isEmpty()) {
+            userSessions.put(UserSession.builder().username(username).build(), session);
+            System.out.println("User " + username + " connected");
+        }
     }
-
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
-//        String username = session.getUri().getQuery(); // Lấy tên người dùng từ query param
-//        if (username != null) {
-        // Kiểm tra xem người gửi có trong map hay không
-        String msgContent = message.getPayload();
-//            System.out.println("Received message from " + username + ": " + msgContent);
-        System.out.println(msgContent);
-        ObjectMapper objectMapper = new ObjectMapper();
-        Message getMessage = objectMapper.readValue(msgContent, Message.class);
-        // Nếu muốn gửi tin nhắn cho tất cả người dùng, bạn có thể lặp qua tất cả các session trong userSessions
-        for (Map.Entry<String, WebSocketSession> entry : userSessions.entrySet()) {
-            WebSocketSession wsSession = entry.getValue();
-            if (wsSession.isOpen()) {
-//                wsSession.sendMessage(new TextMessage(username + ": " + msgContent));
-//                messageRepository.save(getMessage);
-                messageService.save(getMessage);
-                wsSession.sendMessage(new TextMessage(msgContent));
+        // Lấy username từ attributes của session
+        String username = (String) session.getAttributes().get("username");
+
+        if (username != null) {
+            // Lấy nội dung tin nhắn
+            String msgContent = message.getPayload();
+            System.out.println("Received message from " + username + ": " + msgContent);
+
+            // Chuyển đổi tin nhắn JSON sang đối tượng Messages
+            ObjectMapper objectMapper = new ObjectMapper();
+            Messages getMessage = objectMapper.readValue(msgContent, Messages.class);
+
+            // Lặp qua tất cả các session và gửi tin nhắn
+            for (Map.Entry<UserSession, WebSocketSession> entry : userSessions.entrySet()) {
+                WebSocketSession wsSession = entry.getValue();
+                if (wsSession.isOpen()) {
+                    // Lưu tin nhắn vào cơ sở dữ liệu
+                    messageService.save(getMessage);
+
+                    // Gửi tin nhắn kèm theo tên người gửi
+                    wsSession.sendMessage(new TextMessage(msgContent));
+                }
             }
         }
     }
+
 
 //    @Override
 //    protected void handleBinaryMessage(WebSocketSession session, BinaryMessage message) {
@@ -119,12 +133,28 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
 
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
-//        String username = session.getUri().getQuery();
-//        if (username != null) {
-//            userSessions.remove(username);
-//            System.out.println("User " + username + " disconnected");
-//        }
-        userSessions.remove(session.getId());
+        // Retrieve the username from the session attributes
+        String username = (String) session.getAttributes().get("username");
+
+        if (username != null) {
+            // Find the UserSession object corresponding to the username
+            UserSession userSessionToRemove = null;
+
+            // Iterate through the userSessions map to find the session associated with this username
+            for (Map.Entry<UserSession, WebSocketSession> entry : userSessions.entrySet()) {
+                if (entry.getKey().getUsername().equals(username)) {
+                    userSessionToRemove = entry.getKey();
+                    break;
+                }
+            }
+
+            // Remove the UserSession from the map
+            if (userSessionToRemove != null) {
+                userSessions.remove(userSessionToRemove);
+                System.out.println("User " + username + " disconnected");
+            }
+        }
+        System.out.println(status.getCode());
     }
 }
 

@@ -25,5 +25,8 @@ public class StoryService {
         }
         return storyDTOList;
     }
-
+    public List<Story> findAll(){
+        List<Story> stories=storyRepository.findAll();
+        return stories;
+    }
 }

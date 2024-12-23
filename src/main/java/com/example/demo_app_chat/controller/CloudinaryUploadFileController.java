@@ -1,7 +1,6 @@
 package com.example.demo_app_chat.controller;
 
 import com.example.demo_app_chat.service.CloudinaryService;
-import com.example.demo_app_chat.service.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;

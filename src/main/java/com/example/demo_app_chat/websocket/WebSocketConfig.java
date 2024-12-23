@@ -13,6 +13,7 @@ public class WebSocketConfig implements WebSocketConfigurer {
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
         registry.addHandler(getChatWebSocketHandler(), "/chat")
+                .addInterceptors(new UsernameInterceptor())
                 .setAllowedOrigins("*");  // Cho phép tất cả các nguồn (client)
         registry.addHandler(getPushNotificationHandler(), "/notifications").setAllowedOrigins("*");
 
