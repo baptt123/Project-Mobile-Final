@@ -2,7 +2,7 @@ package com.example.demo_app_chat.controller;
 
 import com.example.demo_app_chat.dto.PostDTO;
 import com.example.demo_app_chat.service.PostService;
-//import com.example.demo_app_chat.service.UserService;
+import com.example.demo_app_chat.service.UserService;
 import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +18,7 @@ public class AdminController {
     @Autowired
     private PostService postService;
     @Autowired
-//    private UserService userService;
+    private UserService userService;
 
     @GetMapping("/getpost")
     public ResponseEntity<?> getPost() {
@@ -26,8 +26,8 @@ public class AdminController {
         return ResponseEntity.ok(postDTOList);
     }
 
-//    @GetMapping("/getuser")
-//    public ResponseEntity<?> getUser() {
-//        return ResponseEntity.ok(userService.getAllUsers());
-//    }
+    @GetMapping("/getuser")
+    public ResponseEntity<?> getUser() {
+        return ResponseEntity.ok(userService.getAllUsers());
+    }
 }

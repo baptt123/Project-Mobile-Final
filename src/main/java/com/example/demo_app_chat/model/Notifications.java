@@ -11,13 +11,11 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document("notification")
 public class Notifications {
     @Id
-    private int id;
+    private String id;
     private int idUser;
 //    private int idPost;
 //    private int idSenderUser;
     private String action;
 
-    public void save(Notifications notification) {
 
-    }
 }

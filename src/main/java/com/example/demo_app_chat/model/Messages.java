@@ -3,16 +3,20 @@ package com.example.demo_app_chat.model;
 import jakarta.persistence.Id;
 import lombok.*;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import java.util.Date;
+
 @Builder
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Document("story")
-public class Story {
+@Document("message")
+public class Messages {
     @Id
     private String id;
-    private int idUser; // ID của người đăng story
-    private String imageStory; // Đường dẫn ảnh
-//    private String caption; // Mô tả story
+    private String message;
+    private Date sendingDate;
+    private String userNameSender;
+    private String userNameReceiver;
 }
