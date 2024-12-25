@@ -75,6 +75,7 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An unexpected error occurred");
         }
     }
+
     @PutMapping("/updateProfile")
     public ResponseEntity<String> updateProfile(@RequestBody UpdateUserDTO updateUserDTO) {
         // Gọi UserService để xử lý logic cập nhật
@@ -89,6 +90,7 @@ public class UserController {
         // Trả về thông báo thành công
         return ResponseEntity.ok("Cập nhật thông tin người dùng thành công.");
     }
+
     @PostMapping("/changewithcode")
     public ResponseEntity<String> changePasswordWithCode(@RequestBody EmailVerifycationDTO emailVerifycationDTO) {
         // Kiểm tra tính hợp lệ của mã xác thực và email
@@ -111,6 +113,14 @@ public class UserController {
         }
     }
 
+    @GetMapping("/getusermanagement")
+    public ResponseEntity<List<UserAdminDTO>> getAllUsersForAdmin() {
+        List<UserAdminDTO> userAdminDTOS = userService.getAllUsersForAdmin();
+        if (userAdminDTOS == null || userAdminDTOS.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(userAdminDTOS);
+    }
 
 }
 
