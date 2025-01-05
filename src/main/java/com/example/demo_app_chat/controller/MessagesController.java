@@ -22,7 +22,7 @@ public class MessagesController {
     }
 
     @GetMapping("/getmessages/{usernameSender}/{usernameReceiver}")
-    public ResponseEntity<List<MessagesDTO>> getAllMessages(@PathVariable String usernameSender, @PathVariable int usernameReceiver) {
+    public ResponseEntity<List<MessagesDTO>> getAllMessages(@PathVariable String usernameSender, @PathVariable String usernameReceiver) {
        List<MessagesDTO> list=messageService.getAll(usernameSender, usernameReceiver);
        return ResponseEntity.ok(list);
     }
