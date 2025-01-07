@@ -45,7 +45,7 @@ public class CloudinaryService {
         this.messageRepository = messageRepository;
     }
 
-    public String uploadFileAndSaveStory(MultipartFile file) throws Exception {
+    public String uploadFileAndSaveStory(MultipartFile file,String userName) throws Exception {
         // Tạo Cloudinary instance với thông tin cấu hình trực tiếp
         Cloudinary cloudinary = new Cloudinary(ObjectUtils.asMap(
                 "cloud_name", CLOUD_NAME,
@@ -72,7 +72,7 @@ public class CloudinaryService {
             Random rand = new Random();
             // Lấy URL của file đã upload
             String fileUrl = (String) uploadResult.get("url");
-            Story story = Story.builder().id(UUID.randomUUID().toString()).imageStory(fileUrl).idUser(rand.nextInt(10)).build();
+            Story story = Story.builder().id(UUID.randomUUID().toString()).imageStory(fileUrl).idUser(rand.nextInt(10)).userName(userName).build();
             storyRepository.save(story);
             Notifications notifications=Notifications.builder().id(UUID.randomUUID().toString()).action("New notification at"+new Date()).idUser(new Random().nextInt(1000)).build();
             notificationRepository.save(notifications);
