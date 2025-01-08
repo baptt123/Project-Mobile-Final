@@ -1,38 +1,50 @@
-//package com.example.demo_app_chat.controller;
-//
-//import com.example.demo_app_chat.model.FollowRequest;
-//import com.example.demo_app_chat.model.User;
-//import com.example.demo_app_chat.service.FollowService;
-//import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.http.ResponseEntity;
-//import org.springframework.web.bind.annotation.*;
-//
-//import java.util.List;
-//
-//public class FollowController {
-//    @Autowired
-//    private FollowService followService;
-//    @PostMapping
-//    public ResponseEntity<?> follow(@RequestBody FollowRequest request) {
-//        // Kiểm tra nếu người dùng theo dõi một người khác
-//        boolean success = followService.follow(request.getFollowerId(), request.getFollowingId());
-//        return success ? ResponseEntity.ok("Follow successful") : ResponseEntity.badRequest().body("Already followed");
-//
+package com.example.demo_app_chat.controller;
+
+import com.example.demo_app_chat.model.User;
+import com.example.demo_app_chat.repository.UserRepository;
+import com.example.demo_app_chat.service.FollowService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("/api/user")
+public class FollowController {
+    @Autowired
+    private FollowService followService;
+    @Autowired
+    private UserRepository userRepository;
+
+    // API Follow người dùng khác
+    @PostMapping("/{currentUserId}/follow/{targetUserId}")
+    public ResponseEntity<String> followUser(@PathVariable String currentUserId, @PathVariable String targetUserId) {
+        followService.followUser(currentUserId, targetUserId);
+        return ResponseEntity.ok("Followed successfully!");
+    }
+
+    // API Unfollow người dùng khác
+    @DeleteMapping("/{currentUserId}/unfollow/{targetUserId}")
+    public ResponseEntity<String> unfollowUser(@PathVariable String currentUserId, @PathVariable String targetUserId) {
+        followService.unfollowUser(currentUserId, targetUserId);
+        return ResponseEntity.ok("Unfollowed successfully!");
+    }
+//    // Lấy ds followers và following
+//    @GetMapping("/followers")
+//    public ResponseEntity<List<User>> getFollowers(@RequestParam String userId) {
+////        User user = userRepository.findById(userId).orElseThrow();
+////        List<User> followers = userRepository.findAllById(user.getFollowers());
+//        User user = userRepository.findById(userId).orElseThrow();
+//        List<User> followers = userRepository.findAllById(user.getFollowers());
+//        return ResponseEntity.ok(followers);
 //    }
-//    @DeleteMapping
-//    public ResponseEntity<?> unfollow(@RequestBody FollowRequest request) {
-//        // Kiểm tra nếu người dùng hủy theo dõi một người khác
-//        boolean success = followService.unfollow(request.getFollowerId(), request.getFollowingId());
-//        return success ? ResponseEntity.ok("Unfollow successful") : ResponseEntity.badRequest().body("Not following");
-//    }
 //
-//    @GetMapping("/followers/{userId}")
-//    public ResponseEntity<List<User>> getFollowers(@PathVariable String userId) {  // Thay Long -> String
-//        return ResponseEntity.ok(followService.getFollowers(userId));
+//    @GetMapping("/following")
+//    public ResponseEntity<List<User>> getFollowing(@RequestParam String userId) {
+//        User user = userRepository.findById(userId).orElseThrow();
+//        List<User> following = userRepository.findAllById(user.getFollowing());
+//        return ResponseEntity.ok(following);
 //    }
-//
-//    @GetMapping("/following/{userId}")
-//    public ResponseEntity<List<User>> getFollowing(@PathVariable String userId) {  // Thay Long -> String
-//        return ResponseEntity.ok(followService.getFollowing(userId));
-//    }
-//}
+
+}

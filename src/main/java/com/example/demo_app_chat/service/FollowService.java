@@ -1,82 +1,111 @@
-//package com.example.demo_app_chat.service;
-//
-//import com.example.demo_app_chat.model.Follow;
-//import com.example.demo_app_chat.model.User;
-//import com.example.demo_app_chat.repository.FollowRepository;
-//import com.example.demo_app_chat.repository.UserRepository;
-//import jakarta.persistence.EntityNotFoundException;
-//import org.springframework.beans.factory.annotation.Autowired;
-//
-//import java.time.LocalDateTime;
-//import java.util.List;
-//import java.util.stream.Collectors;
-//
-//public class FollowService {
-//    @Autowired
-//    private FollowRepository followRepository;
-////    @Autowired
-//    private UserRepository userRepository;
-//public boolean follow(String followerId, String followingId) {
-//    if (followerId.equals(followingId)) {
-//        throw new IllegalArgumentException("User cannot follow themselves.");
+package com.example.demo_app_chat.service;
+
+import com.example.demo_app_chat.model.User;
+import com.example.demo_app_chat.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+@Service
+public class FollowService {
+    @Autowired
+    private UserRepository userRepository;
+
+    public void followUser(String currentUserId, String targetUserId) {
+//        User currentUser = userRepository.findById(currentUserId)
+//                .orElseThrow(() -> new UserNotFoundException("User not found with ID: " + currentUserId));
+//        User targetUser = userRepository.findById(targetUserId)
+//                .orElseThrow(() -> new UserNotFoundException("Target user not found with ID: " + targetUserId));
+        User currentUser = (User) userRepository.findById(currentUserId).orElseThrow(()-> new RuntimeException("User not found:" + currentUserId));
+        User targetUser = (User) userRepository.findById(targetUserId).orElseThrow(()-> new RuntimeException("User not found:" + targetUserId));
+        // Thêm targetUser vào danh sách following của currentUser
+        currentUser.getFollowing().add(targetUserId);
+        userRepository.save(currentUser);
+
+        // Thêm currentUser vào danh sách followers của targetUser
+        targetUser.getFollowers().add(currentUserId);
+        userRepository.save(targetUser);
+
+        // Kiểm tra nếu 2 người follow nhau thì trở thành bạn bè
+        if (targetUser.getFollowing().contains(currentUserId)) {
+            currentUser.getFriends().add(targetUserId);
+            targetUser.getFriends().add(currentUserId);
+            userRepository.save(currentUser);
+            userRepository.save(targetUser);
+        }
+    }
+
+    public void unfollowUser(String currentUserId, String targetUserId) {
+//        User currentUser = userRepository.findById(currentUserId)
+//                .orElseThrow(() -> new UserNotFoundException("User not found with ID: " + currentUserId));
+//        User targetUser = userRepository.findById(targetUserId)
+//                .orElseThrow(() -> new UserNotFoundException("Target user not found with ID: " + targetUserId));
+    User currentUser = (User) userRepository.findById(currentUserId).orElseThrow(()-> new RuntimeException("User not found:" + currentUserId));
+    User targetUser = (User) userRepository.findById(targetUserId).orElseThrow(()-> new RuntimeException("User not found:" + targetUserId));
+        // Xóa targetUser khỏi danh sách following của currentUser
+        currentUser.getFollowing().remove(targetUserId);
+        userRepository.save(currentUser);
+
+        // Xóa currentUser khỏi danh sách followers của targetUser
+        targetUser.getFollowers().remove(currentUserId);
+        userRepository.save(targetUser);
+
+        // Nếu họ là bạn bè thì xóa khỏi danh sách friends
+        currentUser.getFriends().remove(targetUserId);
+        targetUser.getFriends().remove(currentUserId);
+        userRepository.save(currentUser);
+        userRepository.save(targetUser);
+    }
+}
+
+
+//@Autowired
+//private UserRepository userRepository;
+//// Follow Người dùng khác
+//public void followUser(String currentUserId, String targetUserId){
+//    // Lấy thông tin của currentUser và targetUser
+//    User currentUser = (User) userRepository.findById(currentUserId).orElseThrow(()-> new RuntimeException("User not found:" + currentUserId));
+//    User targetUser = (User) userRepository.findById(targetUserId).orElseThrow(()-> new RuntimeException("User not found:" + targetUserId));
+//    // Cập nhật ds following và followers
+//    if (!currentUser.getFollowing().contains(targetUserId)) {
+//        currentUser.getFollowing().add(targetUserId);
+//    }
+//    if (!targetUser.getFollowers().contains(currentUserId)) {
+//        targetUser.getFollowers().add(currentUserId);
 //    }
 //
-//    if (!followRepository.existsByFollowerIdAndFollowingId(followerId, followingId)) {
-//        User follower = userRepository.findById(followerId)
-//                .orElseThrow(() -> new EntityNotFoundException("Follower not found"));
-//        User following = userRepository.findById(followingId)
-//                .orElseThrow(() -> new EntityNotFoundException("Following user not found"));
+//    // Nếu targetUser đang follow currentUser, và ngược lại -->friend
+//    if (targetUser.getFollowing().contains(currentUserId) && currentUser.getFollowing().contains(targetUserId)) {
+//        currentUser.getFriends().add(targetUserId);
+//        targetUser.getFriends().add(currentUserId);
 //
-//        Follow follow = new Follow();
-//        follow.setFollowerId(followerId);  // Thay vì set User, chỉ cần ID
-//        follow.setFollowingId(followingId); // Thay vì set User, chỉ cần ID
-//        follow.setCreatedAt(LocalDateTime.now());
-//
-//        followRepository.save(follow);
-//
-//        // Update counts
-//        follower.setFollowingCount(follower.getFollowingCount() + 1);
-//        following.setFollowersCount(following.getFollowersCount() + 1);
-//
-//        userRepository.save(follower);
-//        userRepository.save(following);
-//
-//        return true;
+//        // Lưu lại thay đổi
+//        userRepository.save(currentUser);
+//        userRepository.save(targetUser);
 //    }
-//    return false;
 //}
 //
-//    public boolean unfollow(String followerId, String followingId) { // Sửa Long -> String
-//        if (followRepository.existsByFollowerIdAndFollowingId(followerId, followingId)) {
-//            followRepository.deleteByFollowerIdAndFollowingId(followerId, followingId);
+//// Unfollow
+//public void unfollowUser(String currentUserId, String targetUserId){
+//    // Lấy thông tin của currentUser và targetUser
+//    User currentUser = (User) userRepository.findById(currentUserId).orElseThrow(()-> new RuntimeException("User not found:" + currentUserId));
+//    User targetUser = (User) userRepository.findById(targetUserId).orElseThrow(()-> new RuntimeException("User not found:" + targetUserId));
+//    // Xóa khỏi ds following và followers
+//    currentUser.getFollowing().remove(targetUserId);
+//    targetUser.getFollowers().remove(currentUserId);
 //
-//            // Update counts
-//            User follower = userRepository.findById(followerId)
-//                    .orElseThrow(() -> new EntityNotFoundException("Follower not found"));
-//            User following = userRepository.findById(followingId)
-//                    .orElseThrow(() -> new EntityNotFoundException("Following user not found"));
+//    // Kiểm tra xem hai người có đang là bạn bè không
+//    if (currentUser.getFriends().contains(targetUserId)) {
+//        // Xóa B khỏi danh sách bạn bè của A
+//        currentUser.getFriends().remove(targetUserId);
 //
-//            follower.setFollowingCount(follower.getFollowingCount() - 1);
-//            following.setFollowersCount(following.getFollowersCount() - 1);
-//
-//            userRepository.save(follower);
-//            userRepository.save(following);
-//
-//            return true;
+//        // Nếu B vẫn follow A, giữ nguyên danh sách bạn bè của B
+//        if (!targetUser.getFollowing().contains(currentUserId)) {
+//            // Nếu B không còn follow A, xóa A khỏi danh sách bạn bè của B
+//            targetUser.getFriends().remove(currentUserId);
 //        }
-//        return false;
 //    }
 //
-//    public List<User> getFollowers(String userId) {
-//        return followRepository.findAllByFollowingId(userId).stream()
-//                .map(Follow::getFollower)
-//                .collect(Collectors.toList());
-//    }
-//
-//    public List<User> getFollowing(String userId) {
-//        return followRepository.findAllByFollowerId(userId).stream()
-//                .map(Follow::getFollowing)
-//                .collect(Collectors.toList());
-//    }
-//
+//    // Lưu lại thay đổi
+//    userRepository.save(currentUser);
+//    userRepository.save(targetUser);
 //}
