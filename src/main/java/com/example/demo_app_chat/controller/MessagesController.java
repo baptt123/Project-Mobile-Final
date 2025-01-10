@@ -21,9 +21,9 @@ public class MessagesController {
         this.messageService = messageService;
     }
 
-    @GetMapping("/getmessages/{usernameSender}/{usernameReceiver}")
-    public ResponseEntity<List<MessagesDTO>> getAllMessages(@PathVariable String usernameSender, @PathVariable String usernameReceiver) {
-       List<MessagesDTO> list=messageService.getAll(usernameSender, usernameReceiver);
+    @GetMapping("/getmessages/{userNameSender}/{userNameReceiver}")
+    public ResponseEntity<List<MessagesDTO>> getAllMessages(@PathVariable String userNameSender, @PathVariable String userNameReceiver) {
+       List<MessagesDTO> list=messageService.getAll(userNameSender, userNameReceiver);
        return ResponseEntity.ok(list);
     }
 }

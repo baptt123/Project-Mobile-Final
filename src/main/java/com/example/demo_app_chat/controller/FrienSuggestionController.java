@@ -1,6 +1,5 @@
 package com.example.demo_app_chat.controller;
 
-import com.example.demo_app_chat.model.SuggestFriend;
 import com.example.demo_app_chat.model.User;
 import com.example.demo_app_chat.repository.UserRepository;
 import com.example.demo_app_chat.service.FriendSuggestionService;

@@ -15,6 +15,6 @@ public class MessagesDTO {
     private String id;
     private String message;
     private Date sendingDate;
-    private int idSender;
-    private int idReceipt;
+    private String userNameSender;
+    private String userNameReceiver;
 }

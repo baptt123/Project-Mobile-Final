@@ -2,7 +2,6 @@ package com.example.demo_app_chat.websocket;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
-import com.example.demo_app_chat.model.Message;
 import com.example.demo_app_chat.model.Messages;
 import com.example.demo_app_chat.model.User;
 import com.example.demo_app_chat.model.UserSession;

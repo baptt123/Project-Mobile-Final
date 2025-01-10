@@ -6,17 +6,17 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Date;
 
-@Builder
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@Document("message")
-public class Message {
-    @Id
-    private int id;
-    private String message;
-    private Date sendingDate;
-    private int idSender;
-    private int idReceipt;
-}
+//@Builder
+//@Getter
+//@Setter
+//@NoArgsConstructor
+//@AllArgsConstructor
+//@Document("message")
+//public class Message {
+//    @Id
+//    private int id;
+//    private String message;
+//    private Date sendingDate;
+//    private int idSender;
+//    private int idReceipt;
+//}

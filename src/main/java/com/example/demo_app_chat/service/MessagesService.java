@@ -19,10 +19,10 @@ public class MessagesService {
         messageRepository.save(message);
         return ResponseEntity.ok(message);
     }
-    public List<MessagesDTO> getAll(String usernameSender,String usernameReceiver) {
+    public List<MessagesDTO> getAll(String userNameSender,String userNameReceiver) {
         List<MessagesDTO> messagesDTOList = new ArrayList<>();
-        for(Messages m : messageRepository.getAllMessages(usernameSender,usernameReceiver)) {
-            MessagesDTO messagesDTO = MessagesDTO.builder().id(m.getId()).message(m.getMessage()).sendingDate(m.getSendingDate()).build();
+        for(Messages m : messageRepository.getAllMessages(userNameSender,userNameReceiver)) {
+            MessagesDTO messagesDTO = MessagesDTO.builder().id(m.getId()).message(m.getMessage()).sendingDate(m.getSendingDate()).userNameSender(userNameSender).userNameReceiver(userNameReceiver).build();
             messagesDTOList.add(messagesDTO);
         }
         return messagesDTOList;
