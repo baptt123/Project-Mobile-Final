@@ -30,6 +30,19 @@ public class FollowController {
         followService.unfollowUser(currentUserId, targetUserId);
         return ResponseEntity.ok("Unfollowed successfully!");
     }
+//    // API kiểm tra trạng thái follow
+//    @GetMapping("/{currentUserId}/isFollowing/{targetUserId}")
+//    public ResponseEntity<Boolean> isFollowing(@PathVariable String currentUserId, @PathVariable String targetUserId) {
+//        boolean isFollowing = followService.isFollowing(currentUserId, targetUserId);
+//        return ResponseEntity.ok(isFollowing);
+//    }
+    // API gợi ý bạn bè
+    @GetMapping("/{userId}/suggestedFriends")
+    public ResponseEntity<List<User>> getSuggestedFriends(@PathVariable String userId) {
+        List<User> suggestedFriends = userRepository.findSuggestedFriends(userId);
+        return ResponseEntity.ok(suggestedFriends);
+    }
+}
 //    // Lấy ds followers và following
 //    @GetMapping("/followers")
 //    public ResponseEntity<List<User>> getFollowers(@RequestParam String userId) {
@@ -46,5 +59,3 @@ public class FollowController {
 //        List<User> following = userRepository.findAllById(user.getFollowing());
 //        return ResponseEntity.ok(following);
 //    }
-
-}
