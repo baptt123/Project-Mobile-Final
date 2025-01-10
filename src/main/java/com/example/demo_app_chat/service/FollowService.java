@@ -52,9 +52,9 @@ public class FollowService {
 //        }
     }
     public void unfollowUser(String currentUserId, String targetUserId) {
-        User currentUser = userRepository.findById(currentUserId)
+        User currentUser = (User) userRepository.findById(currentUserId)
                 .orElseThrow(() -> new RuntimeException("User not found: " + currentUserId));
-        User targetUser = userRepository.findById(targetUserId)
+        User targetUser = (User) userRepository.findById(targetUserId)
                 .orElseThrow(() -> new RuntimeException("User not found: " + targetUserId));
 
         // Xóa targetUser khỏi danh sách following của currentUser

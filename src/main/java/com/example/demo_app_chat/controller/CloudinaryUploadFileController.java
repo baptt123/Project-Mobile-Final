@@ -45,7 +45,7 @@ public class CloudinaryUploadFileController {
     }
 
     @PostMapping("/uploadfilestory")
-    public ResponseEntity<String> uploadFileStory(@RequestParam("file") MultipartFile file,@RequestParam("username") String username) {
+    public ResponseEntity<String> uploadFileStory(@RequestParam("file") MultipartFile file,@RequestParam("userName") String username) {
         try {
             String fileUrl = cloudinaryService.uploadFileAndSaveStory(file,username);
             System.out.println(fileUrl);
