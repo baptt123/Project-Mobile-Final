@@ -19,9 +19,9 @@ public class MessagesService {
         messageRepository.save(message);
         return ResponseEntity.ok(message);
     }
-    public List<MessagesDTO> getAll(String userNameSender,String userNameReceiver) {
+    public List<MessagesDTO> getAll(String fullNameSender,String fullNameReceiver) {
         List<MessagesDTO> messagesDTOList = new ArrayList<>();
-        for(Messages m : messageRepository.getAllMessages(userNameSender,userNameReceiver)) {
+        for(Messages m : messageRepository.getAllMessages(fullNameSender,fullNameReceiver)) {
             MessagesDTO messagesDTO = MessagesDTO.builder().id(m.getId()).message(m.getMessage()).sendingDate(m.getSendingDate()).userNameSender(userNameSender).userNameReceiver(userNameReceiver).build();
             messagesDTOList.add(messagesDTO);
         }

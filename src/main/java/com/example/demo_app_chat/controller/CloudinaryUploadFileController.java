@@ -32,10 +32,10 @@ public class CloudinaryUploadFileController {
     @PostMapping("/uploadfile")
     public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile file,
                                              @RequestParam("caption") String caption,
-                                             @RequestParam("userName") String userName) {
+                                             @RequestParam("fullName") String fullName) {
         try {
             // Gọi service để upload file và lưu thông tin vào MongoDB
-            String fileUrl = cloudinaryService.uploadFileAndSavePost(file, caption, userName);
+            String fileUrl = cloudinaryService.uploadFileAndSavePost(file, caption, fullName);
             sink.tryEmitNext("1");
             return ResponseEntity.ok("Upload thành công: " + fileUrl);
         } catch (Exception e) {
@@ -45,9 +45,9 @@ public class CloudinaryUploadFileController {
     }
 
     @PostMapping("/uploadfilestory")
-    public ResponseEntity<String> uploadFileStory(@RequestParam("file") MultipartFile file,@RequestParam("userName") String username) {
+    public ResponseEntity<String> uploadFileStory(@RequestParam("file") MultipartFile file,@RequestParam("fullName") String fullName) {
         try {
-            String fileUrl = cloudinaryService.uploadFileAndSaveStory(file,username);
+            String fileUrl = cloudinaryService.uploadFileAndSaveStory(file,fullName);
             System.out.println(fileUrl);
             sink.tryEmitNext("1");
             return ResponseEntity.ok(fileUrl);

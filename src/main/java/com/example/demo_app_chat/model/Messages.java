@@ -17,6 +17,6 @@ public class Messages {
     private String id;
     private String message;
     private Date sendingDate;
-    private String userNameSender;
-    private String userNameReceiver;
+    private String fullNameSender;
+    private String fullNameReceiver;
 }

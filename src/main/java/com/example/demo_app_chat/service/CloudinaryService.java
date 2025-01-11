@@ -45,7 +45,7 @@ public class CloudinaryService {
         this.messageRepository = messageRepository;
     }
 
-    public String uploadFileAndSaveStory(MultipartFile file,String userName) throws Exception {
+    public String uploadFileAndSaveStory(MultipartFile file,String fullName) throws Exception {
         // Tạo Cloudinary instance với thông tin cấu hình trực tiếp
         Cloudinary cloudinary = new Cloudinary(ObjectUtils.asMap(
                 "cloud_name", CLOUD_NAME,
@@ -72,7 +72,7 @@ public class CloudinaryService {
             Random rand = new Random();
             // Lấy URL của file đã upload
             String fileUrl = (String) uploadResult.get("url");
-            Story story = Story.builder().id(UUID.randomUUID().toString()).imageStory(fileUrl).idUser(rand.nextInt(10)).userName(userName).build();
+            Story story = Story.builder().id(UUID.randomUUID().toString()).imageStory(fileUrl).idUser(rand.nextInt(10)).fullName(fullName).build();
             storyRepository.save(story);
             Notifications notifications=Notifications.builder().id(UUID.randomUUID().toString()).action("New notification at"+new Date()).idUser(new Random().nextInt(1000)).build();
             notificationRepository.save(notifications);
@@ -83,7 +83,7 @@ public class CloudinaryService {
 
     }
 
-    public String uploadFileAndSavePost(MultipartFile file, String caption, String userName) throws Exception {
+    public String uploadFileAndSavePost(MultipartFile file, String caption, String fullName) throws Exception {
         // Tạo Cloudinary instance với thông tin cấu hình trực tiếp
         Cloudinary cloudinary = new Cloudinary(ObjectUtils.asMap(
                 "cloud_name", CLOUD_NAME,
@@ -113,7 +113,7 @@ public class CloudinaryService {
             String fileUrl = (String) uploadResult.get("url");
 
             // Tạo đối tượng Post và lưu vào MongoDB
-            UserInfo user = UserInfo.builder().userName(userName).profileImagePath("temp_link").build();
+            UserInfo user = UserInfo.builder().userName(fullName).profileImagePath("temp_link").build();
             Post post = Post.builder().user(user).media(fileUrl).caption(caption)
                     .likeCount(1).saveCount(2).isSaved(2).isLike(1).shareCount(2)
                     .comments(null).build();
