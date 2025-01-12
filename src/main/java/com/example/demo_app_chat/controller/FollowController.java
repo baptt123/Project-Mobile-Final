@@ -30,32 +30,36 @@ public class FollowController {
         followService.unfollowUser(currentUserId, targetUserId);
         return ResponseEntity.ok("Unfollowed successfully!");
     }
-//    // API kiểm tra trạng thái follow
-//    @GetMapping("/{currentUserId}/isFollowing/{targetUserId}")
-//    public ResponseEntity<Boolean> isFollowing(@PathVariable String currentUserId, @PathVariable String targetUserId) {
-//        boolean isFollowing = followService.isFollowing(currentUserId, targetUserId);
-//        return ResponseEntity.ok(isFollowing);
-//    }
     // API gợi ý bạn bè
     @GetMapping("/{userId}/suggestedFriends")
     public ResponseEntity<List<User>> getSuggestedFriends(@PathVariable String userId) {
         List<User> suggestedFriends = userRepository.findSuggestedFriends(userId);
         return ResponseEntity.ok(suggestedFriends);
     }
+
+    // API lấy danh sách thông tin followers
+    @GetMapping("/{userId}/followers")
+    public ResponseEntity<List<User>> getFollowers(@PathVariable String userId) {
+        List<User> followers = followService.getFollowers(userId);
+        return ResponseEntity.ok(followers);
+    }
+    // API lấy danh sách bạn bè
+    @GetMapping("/{userId}/friends")
+    public ResponseEntity<List<User>> getFriends(@PathVariable String userId) {
+        List<User> friends = followService.getFriends(userId);
+        return ResponseEntity.ok(friends);
+    }
+
+    // API lấy danh sách người dùng mà bạn đang theo dõi
+    @GetMapping("/{userId}/following")
+    public ResponseEntity<List<User>> getFollowing(@PathVariable String userId) {
+        List<User> following = followService.getFollowing(userId);
+        return ResponseEntity.ok(following);
+    }
 }
-//    // Lấy ds followers và following
-//    @GetMapping("/followers")
-//    public ResponseEntity<List<User>> getFollowers(@RequestParam String userId) {
-////        User user = userRepository.findById(userId).orElseThrow();
-////        List<User> followers = userRepository.findAllById(user.getFollowers());
-//        User user = userRepository.findById(userId).orElseThrow();
-//        List<User> followers = userRepository.findAllById(user.getFollowers());
-//        return ResponseEntity.ok(followers);
-//    }
-//
-//    @GetMapping("/following")
-//    public ResponseEntity<List<User>> getFollowing(@RequestParam String userId) {
-//        User user = userRepository.findById(userId).orElseThrow();
-//        List<User> following = userRepository.findAllById(user.getFollowing());
-//        return ResponseEntity.ok(following);
+//    // API kiểm tra trạng thái follow
+//    @GetMapping("/{currentUserId}/isFollowing/{targetUserId}")
+//    public ResponseEntity<Boolean> isFollowing(@PathVariable String currentUserId, @PathVariable String targetUserId) {
+//        boolean isFollowing = followService.isFollowing(currentUserId, targetUserId);
+//        return ResponseEntity.ok(isFollowing);
 //    }
