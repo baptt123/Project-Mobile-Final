@@ -16,9 +16,9 @@ public class FollowService {
     @Autowired
     private UserRepository userRepository;
     public void followUser(String currentUserId, String targetUserId) {
-        User currentUser = userRepository.findById(currentUserId)
+        User currentUser = (User) userRepository.findById(currentUserId)
                 .orElseThrow(() -> new RuntimeException("User not found: " + currentUserId));
-        User targetUser = userRepository.findById(targetUserId)
+        User targetUser = (User)userRepository.findById(targetUserId)
                 .orElseThrow(() -> new RuntimeException("User not found: " + targetUserId));
 
         initializeUserLists(currentUser);
@@ -57,7 +57,7 @@ public class FollowService {
     public void unfollowUser(String currentUserId, String targetUserId) {
         User currentUser = (User) userRepository.findById(currentUserId)
                 .orElseThrow(() -> new RuntimeException("User not found: " + currentUserId));
-        User targetUser = (User) userRepository.findById(targetUserId)
+        User targetUser =(User) userRepository.findById(targetUserId)
                 .orElseThrow(() -> new RuntimeException("User not found: " + targetUserId));
 
         initializeUserLists(currentUser);
@@ -101,7 +101,7 @@ public class FollowService {
     }
 
     public List<User> getFollowers(String userId) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+        User user = (User)userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
         List<String> followerIds = user.getFollowers(); // Lấy danh sách ID từ trường followers
 
         // Truy vấn thông tin chi tiết của các followers từ MongoDB
@@ -109,7 +109,7 @@ public class FollowService {
     }
     // Lấy danh sách bạn bè
     public List<User> getFriends(String userId) {
-        User user = userRepository.findById(userId)
+        User user = (User)userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
         List<String> friendIds = user.getFriends(); // Lấy danh sách ID từ trường friends
 
@@ -119,12 +119,11 @@ public class FollowService {
 
     // Lấy danh sách người dùng mà bạn đang theo dõi
     public List<User> getFollowing(String userId) {
-        User user = userRepository.findById(userId)
+        User user = (User)userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
         List<String> followingIds = user.getFollowing(); // Lấy danh sách ID từ trường following
 
         // Truy vấn thông tin chi tiết của những người đang theo dõi từ MongoDB
         return userRepository.findAllById(followingIds);
     }
-
 }
