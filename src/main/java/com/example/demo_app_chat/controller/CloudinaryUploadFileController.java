@@ -6,10 +6,12 @@ import com.example.demo_app_chat.service.CloudinaryService;
 import com.example.demo_app_chat.service.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.Duration;
 import java.util.Map;
 
 @RestController
@@ -17,7 +19,6 @@ import java.util.Map;
 public class CloudinaryUploadFileController {
     @Autowired
     private final CloudinaryService cloudinaryService;
-
     public CloudinaryUploadFileController(CloudinaryService cloudinaryService) {
         this.cloudinaryService = cloudinaryService;
 
@@ -47,6 +48,34 @@ public class CloudinaryUploadFileController {
         } catch (Exception e) {
             return ResponseEntity.status(500).body("Upload file that bai");
         }
+
+
+    }
+
+
+    @GetMapping(value = "/sse/upload", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    public Flux<String> streamEvents() {
+        return sink.asFlux()
+                .delayElements(Duration.ofMillis(100)); // Thêm delay nhỏ để tránh nghẽn
+    }
+
+    @GetMapping(value = "/sse/like", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    public Flux<String> likeEvents() {
+        return sink.asFlux().delayElements(Duration.ofMillis(100));
+    }
+
+    @GetMapping(value = "/sse/comment", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    public Flux<String> commentEvents() {
+        return sink.asFlux().delayElements(Duration.ofMillis(100));
+    }
+
+    @GetMapping(value = "/sse/share", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    public Flux<String> shareEvents() {
+        return sink.asFlux().delayElements(Duration.ofMillis(100));
+    }
+    @GetMapping(value="/sse/follow",produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    public Flux<String> followEvents(){
+        return sink.asFlux().delayElements(Duration.ofMillis(100));
     }
     @PutMapping("/updateavatar/{id}")
     public ResponseEntity<String> updateAvatar(@PathVariable String id,
@@ -63,6 +92,5 @@ public class CloudinaryUploadFileController {
             return ResponseEntity.status(500).body("Cập nhật avatar thất bại: " + e.getMessage());
         }
     }
-
-}
+    }
 

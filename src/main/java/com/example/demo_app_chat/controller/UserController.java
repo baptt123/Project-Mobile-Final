@@ -119,6 +119,13 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Người dùng không tồn tại.");
         }
     }
-
+    @GetMapping("/getusermanagement")
+    public ResponseEntity<List<UserAdminDTO>> getAllUsersForAdmin() {
+        List<UserAdminDTO> userAdminDTOS = userService.getAllUsersForAdmin();
+        if (userAdminDTOS == null || userAdminDTOS.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(userAdminDTOS);
+    }
 }
 

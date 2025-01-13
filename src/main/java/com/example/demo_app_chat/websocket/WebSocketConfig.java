@@ -13,6 +13,7 @@ public class WebSocketConfig implements WebSocketConfigurer {
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
         // Đăng ký handler cho chat và thông báo
         registry.addHandler(getChatWebSocketHandler(), "/chat")
+                .addInterceptors(new UsernameInterceptor())
                 .setAllowedOrigins("*");  // Cho phép tất cả các nguồn (client)
         registry.addHandler(getWebSocketHandlerImpl(), "/notifications").setAllowedOrigins("*"); // Dùng WebSocketHandlerImpl cho notifications
     }
