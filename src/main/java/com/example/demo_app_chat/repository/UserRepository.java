@@ -12,8 +12,7 @@ import java.util.Optional;
 public interface UserRepository extends MongoRepository<User, Integer> {
     User findByUsernameAndPassword(String username, String password);
 
-    Optional<Object> findById(String id);
-
+    Optional<User> findById(String id);
     User findByUsername(String userName);
 
     User findByEmail(String email);
@@ -25,4 +24,4 @@ field la nhung truong thuoc tinh can lay
     @Query(value="{}",fields = "{fullName: 1,gender: 1,profileImagePath: 1}")
     List<User> getALlUsersForAdmin();
 }
-}
+

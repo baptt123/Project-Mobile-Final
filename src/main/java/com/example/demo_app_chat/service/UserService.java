@@ -9,8 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -103,13 +105,13 @@ public class UserService {
             user.setFullName(updateUserDTO.getFullName());
         }
         user.setGender(updateUserDTO.getGender());
-        user.setProfileImagePath(updateUserDTO.getProfileImagePath());
 
         // Lưu thay đổi
         userRepository.save(user);
         return true; // Cập nhật thành công
     }
-public boolean sendCode(String code) {
+
+    public boolean sendCode(String code) {
 return false;
 }
 public boolean resetPassword(ForgotPasswordDTO forgotPasswordDTO){

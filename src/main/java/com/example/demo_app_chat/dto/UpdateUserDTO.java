@@ -12,4 +12,5 @@ public class UpdateUserDTO {
     String email;
     String fullName;
     int gender; // 0: nam, 1: nữ
+    String profileImagePath;
 }

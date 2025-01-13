@@ -3,13 +3,14 @@ package com.example.demo_app_chat.controller;
 import com.example.demo_app_chat.dto.UpdateAvatarDTO;
 import com.example.demo_app_chat.model.Message;
 import com.example.demo_app_chat.service.CloudinaryService;
-import com.example.demo_app_chat.service.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Sinks;
 
 import java.time.Duration;
 import java.util.Map;
@@ -19,6 +20,8 @@ import java.util.Map;
 public class CloudinaryUploadFileController {
     @Autowired
     private final CloudinaryService cloudinaryService;
+    // Sinks để phát sự kiện
+    private final Sinks.Many<String> sink = Sinks.many().multicast().onBackpressureBuffer();
     public CloudinaryUploadFileController(CloudinaryService cloudinaryService) {
         this.cloudinaryService = cloudinaryService;
 
@@ -31,7 +34,7 @@ public class CloudinaryUploadFileController {
         try {
             // Gọi service để upload file và lưu thông tin vào MongoDB
             String fileUrl = cloudinaryService.uploadFileAndSavePost(file, caption, userName);
-
+            sink.tryEmitNext("1");
             return ResponseEntity.ok("Upload thành công: " + fileUrl);
         } catch (Exception e) {
             e.printStackTrace();
@@ -44,6 +47,7 @@ public class CloudinaryUploadFileController {
         try {
             String fileUrl = cloudinaryService.uploadFileAndSaveStory(file);
             System.out.println(fileUrl);
+            sink.tryEmitNext("1");
             return ResponseEntity.ok(fileUrl);
         } catch (Exception e) {
             return ResponseEntity.status(500).body("Upload file that bai");
