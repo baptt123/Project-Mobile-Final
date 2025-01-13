@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -88,22 +89,28 @@ public class UserService {
     }
     public boolean updateUser(UpdateUserDTO updateUserDTO) {
         // Tìm người dùng theo ID
-        User user = (User) userRepository.findById(updateUserDTO.getId()).orElse(null);
-        if (user == null) {
+        Optional<User> optionalUser = userRepository.findById(updateUserDTO.getId());
+        if (optionalUser.isEmpty()) {
             return false;
         }
 
+        User user = optionalUser.get();
+
         // Cập nhật thông tin người dùng
-        user.setEmail(updateUserDTO.getEmail());
-        user.setFullName(updateUserDTO.getFullName());
+        if (updateUserDTO.getEmail() != null) {
+            user.setEmail(updateUserDTO.getEmail());
+        }
+        if (updateUserDTO.getFullName() != null) {
+            user.setFullName(updateUserDTO.getFullName());
+        }
         user.setGender(updateUserDTO.getGender());
-        user.setProfileImagePath(updateUserDTO.getProfileImagePath());
 
         // Lưu thay đổi
         userRepository.save(user);
         return true; // Cập nhật thành công
     }
-public boolean sendCode(String code) {
+
+    public boolean sendCode(String code) {
 return false;
 }
 public boolean resetPassword(ForgotPasswordDTO forgotPasswordDTO){

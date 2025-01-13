@@ -26,9 +26,6 @@ public class PushNotificationHandler extends TextWebSocketHandler {
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
         notificationList.remove(session);
     }
-
-
-
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
         String getMessage=message.getPayload();

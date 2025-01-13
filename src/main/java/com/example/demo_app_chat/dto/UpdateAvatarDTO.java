@@ -7,9 +7,7 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class UpdateUserDTO {
+public class UpdateAvatarDTO {
     String id;
-    String email;
-    String fullName;
-    int gender; // 0: nam, 1: nữ
+    String image_path;
 }

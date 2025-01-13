@@ -119,11 +119,8 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
 
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
-//        String username = session.getUri().getQuery();
-//        if (username != null) {
-//            userSessions.remove(username);
-//            System.out.println("User " + username + " disconnected");
-//        }
+
+
         userSessions.remove(session.getId());
     }
 }

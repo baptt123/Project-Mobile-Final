@@ -1,5 +1,6 @@
 package com.example.demo_app_chat.controller;
 
+import com.example.demo_app_chat.dto.UpdateAvatarDTO;
 import com.example.demo_app_chat.model.Message;
 import com.example.demo_app_chat.service.CloudinaryService;
 import com.example.demo_app_chat.service.MessageService;
@@ -16,6 +17,7 @@ import java.util.Map;
 public class CloudinaryUploadFileController {
     @Autowired
     private final CloudinaryService cloudinaryService;
+
     public CloudinaryUploadFileController(CloudinaryService cloudinaryService) {
         this.cloudinaryService = cloudinaryService;
 
@@ -45,10 +47,22 @@ public class CloudinaryUploadFileController {
         } catch (Exception e) {
             return ResponseEntity.status(500).body("Upload file that bai");
         }
+    }
+    @PutMapping("/updateavatar/{id}")
+    public ResponseEntity<String> updateAvatar(@PathVariable String id,
+                                               @RequestParam("file") MultipartFile file) {
+        try {
+            // Tạo đối tượng DTO với ID người dùng
+            UpdateAvatarDTO updateAvatarDTO = new UpdateAvatarDTO(id, "default_image_path");
 
+            // Gọi service để upload ảnh lên Cloudinary và cập nhật avatar
+            String fileUrl = cloudinaryService.updateAvatar(updateAvatarDTO, file);
 
+            return ResponseEntity.ok("Cập nhật avatar thành công: " + fileUrl);
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("Cập nhật avatar thất bại: " + e.getMessage());
+        }
     }
 
-
-    }
+}
 

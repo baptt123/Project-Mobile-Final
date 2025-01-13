@@ -110,7 +110,15 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Đã xảy ra lỗi khi thay đổi mật khẩu.");
         }
     }
-
+    @PutMapping("/update")
+    public ResponseEntity<String> updateUser(@RequestBody UpdateUserDTO updateUserDTO) {
+        boolean isUpdated = userService.updateUser(updateUserDTO);
+        if (isUpdated) {
+            return ResponseEntity.ok("Cập nhật thông tin người dùng thành công.");
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Người dùng không tồn tại.");
+        }
+    }
 
 }
 
