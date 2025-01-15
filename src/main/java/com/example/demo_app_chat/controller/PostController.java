@@ -1,6 +1,5 @@
 package com.example.demo_app_chat.controller;
 
-import com.example.demo_app_chat.dto.PostDTO;
 import com.example.demo_app_chat.dto.UpdatePostRequest;
 import com.example.demo_app_chat.model.Comment;
 import com.example.demo_app_chat.model.Post;

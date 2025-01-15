@@ -1,6 +1,6 @@
 package com.example.demo_app_chat.service;
 
-import com.example.demo_app_chat.dto.PostDTO;
+
 import com.example.demo_app_chat.model.Comment;
 import com.example.demo_app_chat.model.Post;
 import com.example.demo_app_chat.repository.PostRepository;
