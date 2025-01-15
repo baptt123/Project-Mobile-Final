@@ -17,5 +17,5 @@ public class Story {
     private int idUser; // ID của người đăng story
     private String imageStory; // Đường dẫn ảnh
     //    private String caption; // Mô tả story
-    private String userName;
+    private String fullName;
 }

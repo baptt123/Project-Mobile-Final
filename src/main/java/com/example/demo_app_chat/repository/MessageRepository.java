@@ -1,6 +1,5 @@
 package com.example.demo_app_chat.repository;
 
-import com.example.demo_app_chat.model.Message;
 import com.example.demo_app_chat.model.Messages;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
@@ -11,6 +10,6 @@ import java.util.List;
 
 @Repository
 public interface MessageRepository extends MongoRepository<Messages, String> {
-@Query("{userNameSender: ?0,userNameReceiver: ?1}")
-    List<Messages> getAllMessages( String userNameSender, String userNameReceiver);
+@Query("{fullNameSender: ?0,fullNameReceiver: ?1}")
+    List<Messages> getAllMessages( String fullNameSender, String fullNameReceiver);
 }

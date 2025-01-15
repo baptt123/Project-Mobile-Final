@@ -2,7 +2,6 @@ package com.example.demo_app_chat.websocket;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
-import com.example.demo_app_chat.model.Message;
 import com.example.demo_app_chat.model.Messages;
 import com.example.demo_app_chat.model.User;
 import com.example.demo_app_chat.model.UserSession;
@@ -59,7 +58,7 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
             Messages getMessage = objectMapper.readValue(msgContent, Messages.class);
             //Map luu tru du lieu cua json
             Map<String,Object> convertJSON=objectMapper.convertValue(getMessage, Map.class);
-            String userNameReceiver=convertJSON.get("userNameReceiver").toString();
+            String userNameReceiver=convertJSON.get("fullNameReceiver").toString();
             // Lặp qua tất cả các session và gửi tin nhắn
             for (Map.Entry<UserSession, WebSocketSession> entry : userSessions.entrySet()) {
                     if(entry.getKey().getUsername().equals(userNameReceiver)) {
