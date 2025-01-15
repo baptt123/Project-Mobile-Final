@@ -1,6 +1,7 @@
 package com.example.demo_app_chat.controller;
 
-import com.example.demo_app_chat.model.SuggestFriend;
+//import com.example.demo_app_chat.model.SuggestFriend;
+
 import com.example.demo_app_chat.model.User;
 import com.example.demo_app_chat.repository.UserRepository;
 import com.example.demo_app_chat.service.FriendSuggestionService;
@@ -18,21 +19,11 @@ import java.util.List;
 @RequestMapping("/api/user")
 public class FrienSuggestionController {
     @Autowired
-    private UserRepository userRepository;
-//      private FriendSuggestionService friendSuggestionService;
+    private FriendSuggestionService friendSuggestionService;
 // API lấy danh sách bạn bè gợi ý
     @GetMapping("/suggested-friends/{userId}")
     public ResponseEntity<List<User>> getSuggestedFriends(@PathVariable String userId) {
-        List<User> suggestedFriends = userRepository.findSuggestedFriends(userId);
+        List<User> suggestedFriends = friendSuggestionService.findSuggestedFriends(userId);
         return ResponseEntity.ok(suggestedFriends);
     }
 }
-
-//@Autowired
-//private FriendSuggestionService friendSuggestionService;
-//// API lấy danh sách bạn bè gợi ý
-//@GetMapping("/suggested-friends/{userId}")
-//public ResponseEntity<List<SuggestFriend>> getSuggestedFriends(@PathVariable String userId) {
-//    List<SuggestFriend> suggestedFriends = friendSuggestionService.findSuggestedFriends(userId);
-//    return ResponseEntity.ok(suggestedFriends);
-//}

@@ -126,5 +126,4 @@ public class FollowService {
         // Truy vấn thông tin chi tiết của những người đang theo dõi từ MongoDB
         return userRepository.findAllById(followingIds);
     }
-
 }
