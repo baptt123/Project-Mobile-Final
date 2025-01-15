@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -21,7 +22,6 @@ public class UserService {
     EmailVerifycationService emailVerifycationService;
     @Autowired
     private UserRepository userRepository;
-
     public User updateFollowingCount(String userId, int count, String action) {
         // Lấy User từ ID
         User user = getUserById(userId);
@@ -52,22 +52,20 @@ public class UserService {
     }
 
 
-    public List<User> getAllUsers() {
+
+    public List<User> getAllUsers(){
         return userRepository.findAll();
     }
-
-    public User findUser(String user, String password) {
-        return userRepository.findByUsernameAndPassword(user, password);
+    public User findUser(String user,String password){
+        return userRepository.findByUsernameAndPassword(user,password);
     }
-
     public boolean findUserByUserName(String userName) {
         User user = userRepository.findByUsername(userName);
         return user != null; // Trả về true nếu tìm thấy, false nếu không
     }
-
     public boolean findUserByEmail(String email) {
         User user = userRepository.findByEmail(email);
-        return user != null; // Trả về true nếu tìm thấy, false nếu không
+        return user!= null; // Trả về true nếu tìm thấy, false nếu không
     }
 
     public User saveUser(SignUpDTO userDTO) {
@@ -82,6 +80,7 @@ public class UserService {
                 .username(userDTO.getUsername())
                 .password(userDTO.getPassword())
                 .email(userDTO.getEmail())
+                .fullName(userDTO.getFullName())
                 .build();
 
         return userRepository.save(user); // Lưu user vào cơ sở dữ liệu
@@ -90,19 +89,23 @@ public class UserService {
     public User getUserById(String id) {
         return (User) userRepository.findById(id).orElse(null);
     }
-
     public boolean updateUser(UpdateUserDTO updateUserDTO) {
         // Tìm người dùng theo ID
-        User user = (User) userRepository.findById(updateUserDTO.getId()).orElse(null);
-        if (user == null) {
+        Optional<User> optionalUser = userRepository.findById(updateUserDTO.getId());
+        if (optionalUser.isEmpty()) {
             return false;
         }
 
+        User user = optionalUser.get();
+
         // Cập nhật thông tin người dùng
-        user.setEmail(updateUserDTO.getEmail());
-        user.setFullName(updateUserDTO.getFullName());
+        if (updateUserDTO.getEmail() != null) {
+            user.setEmail(updateUserDTO.getEmail());
+        }
+        if (updateUserDTO.getFullName() != null) {
+            user.setFullName(updateUserDTO.getFullName());
+        }
         user.setGender(updateUserDTO.getGender());
-        user.setProfileImagePath(updateUserDTO.getProfileImagePath());
 
         // Lưu thay đổi
         userRepository.save(user);
@@ -110,21 +113,17 @@ public class UserService {
     }
 
     public boolean sendCode(String code) {
+return false;
+}
+public boolean resetPassword(ForgotPasswordDTO forgotPasswordDTO){
         return false;
     }
-
-    public boolean resetPassword(ForgotPasswordDTO forgotPasswordDTO) {
-        return false;
-    }
-
     public boolean verifyCode(String code) {
         return false;
     }
-
     public boolean updatePassword(String code, String newPassword) {
         return false;
     }
-
     public boolean changePasswordWithCode(EmailVerifycationDTO emailVerifycationDTO) {
         // Kiểm tra mã xác thực và email
         EmailVerification emailVerification = emailVerifycationRepository.findByEmail(emailVerifycationDTO.getEmail());

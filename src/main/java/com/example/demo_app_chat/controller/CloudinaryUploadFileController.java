@@ -1,5 +1,7 @@
 package com.example.demo_app_chat.controller;
 
+import com.example.demo_app_chat.dto.UpdateAvatarDTO;
+import com.example.demo_app_chat.model.Message;
 import com.example.demo_app_chat.service.CloudinaryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -10,11 +12,8 @@ import org.springframework.web.multipart.MultipartFile;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Sinks;
 
-import javax.print.attribute.standard.Media;
-import java.awt.*;
 import java.time.Duration;
 import java.util.Map;
-import java.util.Random;
 
 @RestController
 @RequestMapping("/api/uploadfile")
@@ -23,7 +22,6 @@ public class CloudinaryUploadFileController {
     private final CloudinaryService cloudinaryService;
     // Sinks để phát sự kiện
     private final Sinks.Many<String> sink = Sinks.many().multicast().onBackpressureBuffer();
-
     public CloudinaryUploadFileController(CloudinaryService cloudinaryService) {
         this.cloudinaryService = cloudinaryService;
 
@@ -58,6 +56,7 @@ public class CloudinaryUploadFileController {
 
     }
 
+
     @GetMapping(value = "/sse/upload", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public Flux<String> streamEvents() {
         return sink.asFlux()
@@ -82,5 +81,20 @@ public class CloudinaryUploadFileController {
     public Flux<String> followEvents(){
         return sink.asFlux().delayElements(Duration.ofMillis(100));
     }
-}
+    @PutMapping("/updateavatar/{id}")
+    public ResponseEntity<String> updateAvatar(@PathVariable String id,
+                                               @RequestParam("file") MultipartFile file) {
+        try {
+            // Tạo đối tượng DTO với ID người dùng
+            UpdateAvatarDTO updateAvatarDTO = new UpdateAvatarDTO(id, "default_image_path");
+
+            // Gọi service để upload ảnh lên Cloudinary và cập nhật avatar
+            String fileUrl = cloudinaryService.updateAvatar(updateAvatarDTO, file);
+
+            return ResponseEntity.ok(fileUrl);
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("Cập nhật avatar thất bại: " + e.getMessage());
+        }
+    }
+    }
 

@@ -16,7 +16,7 @@ import java.util.Optional;
 public interface UserRepository extends MongoRepository<User, String> {
     User findByUsernameAndPassword(String username, String password);
 
-//    Optional<Object> findById(String id);
+
     Optional<User> findById(String id);
     User findByUsername(String userName);
 
@@ -30,10 +30,10 @@ public interface UserRepository extends MongoRepository<User, String> {
     List<User> findSuggestedFriends(@Param("userId") String userId);
 
     /*
-    value la gia tri rong mac dinh
-    field la nhung truong thuoc tinh can lay
-    1 co nghia la co lay
-     */
+value la gia tri rong mac dinh
+field la nhung truong thuoc tinh can lay
+1 co nghia la co lay
+ */
     @Query(value="{}",fields = "{fullName: 1,gender: 1,profileImagePath: 1}")
     List<User> getALlUsersForAdmin();
 

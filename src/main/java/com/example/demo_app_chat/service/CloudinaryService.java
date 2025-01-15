@@ -1,43 +1,92 @@
-package com.example.demo_app_chat.service;
 
-import com.cloudinary.Cloudinary;
-import com.cloudinary.utils.ObjectUtils;
-import com.example.demo_app_chat.model.*;
-import com.example.demo_app_chat.repository.MessageRepository;
-import com.example.demo_app_chat.repository.NotificationRepository;
-import com.example.demo_app_chat.repository.PostRepository;
-import com.example.demo_app_chat.repository.StoryRepository;
-import org.aspectj.weaver.ast.Not;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.aggregation.ArithmeticOperators;
-import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
+    package com.example.demo_app_chat.service;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.*;
+    import com.cloudinary.Cloudinary;
+    import com.cloudinary.utils.ObjectUtils;
+    import com.example.demo_app_chat.dto.UpdateAvatarDTO;
+    import com.example.demo_app_chat.model.Post;
+    import com.example.demo_app_chat.model.Story;
+    import com.example.demo_app_chat.model.User;
+    import com.example.demo_app_chat.model.UserInfo;
+    import com.example.demo_app_chat.repository.MessageRepository;
+    import com.example.demo_app_chat.repository.PostRepository;
+    import com.example.demo_app_chat.repository.StoryRepository;
+    import com.example.demo_app_chat.repository.UserRepository;
+    import org.springframework.beans.factory.annotation.Autowired;
+    import org.springframework.stereotype.Service;
+    import org.springframework.web.multipart.MultipartFile;
 
-@Service
-public class CloudinaryService {
+    import java.io.File;
+    import java.io.FileOutputStream;
+    import java.io.IOException;
+    import java.util.Map;
+    import java.util.Optional;
+    import java.util.Random;
 
-    public static final String CLOUD_NAME = "dllqdawgo";
-    public static final String API_KEY = "518211464238961";
-    public static final String API_SECRET = "D7rrw9Zz5E5JGRSNADfblVPprtQ";
-    @Autowired
-    private final PostRepository postRepository;
-    @Autowired
-    private final StoryRepository storyRepository;
-    @Autowired
-    private final MessageRepository messageRepository;
-    @Autowired
-    private final NotificationRepository notificationRepository;
-    public CloudinaryService(PostRepository postRepository, StoryRepository storyRepository, MessageRepository messageRepository,NotificationRepository notificationRepository) {
-        this.notificationRepository = notificationRepository;
-        this.postRepository = postRepository;
-        this.storyRepository = storyRepository;
-        this.messageRepository = messageRepository;
-    }
+    @Service
+    public class CloudinaryService {
+
+        public static final String CLOUD_NAME = "dllqdawgo";
+        public static final String API_KEY = "518211464238961";
+        public static final String API_SECRET = "D7rrw9Zz5E5JGRSNADfblVPprtQ";
+        @Autowired
+        private final PostRepository postRepository;
+        @Autowired
+        private final StoryRepository storyRepository;
+        @Autowired
+        private final MessageRepository messageRepository;
+        @Autowired
+        private final UserRepository userRepository;
+        // Phương thức cập nhật ảnh đại diện
+        public String updateAvatar(UpdateAvatarDTO updateAvatarDTO, MultipartFile file) throws Exception {
+            Cloudinary cloudinary = new Cloudinary(ObjectUtils.asMap(
+                    "cloud_name", CLOUD_NAME,
+                    "api_key", API_KEY,
+                    "api_secret", API_SECRET
+            ));
+
+            // Chuyển MultipartFile thành File tạm thời
+            File tempFile = convertMultipartFileToFile(file);
+
+            try {
+                // Upload ảnh lên Cloudinary
+                Map<String, Object> fileupload = ObjectUtils.asMap(
+                        "use_filename", true,
+                        "unique_filename", false,
+                        "overwrite", true,
+                        "resource_type", "image"
+                );
+
+                Map uploadResult = cloudinary.uploader().upload(tempFile, fileupload);
+
+                // Xóa file tạm sau khi upload
+                tempFile.delete();
+
+                // Lấy URL của ảnh đã upload
+                String fileUrl = (String) uploadResult.get("url");
+
+                // Tìm người dùng từ ID và cập nhật ảnh đại diện
+                Optional<User> optionalUser = userRepository.findById(updateAvatarDTO.getId());
+                if (optionalUser.isPresent()) {
+                    User user = optionalUser.get();
+                    user.setProfileImagePath(fileUrl); // Giả sử User có thuộc tính avatar
+                    userRepository.save(user); // Lưu đối tượng User đã cập nhật
+                    return fileUrl;
+                } else {
+                    throw new Exception("User not found");
+                }
+            } catch (IOException e) {
+                throw new IOException("Upload ảnh thất bại", e);
+            }
+        }
+
+
+
+        public CloudinaryService(PostRepository postRepository, StoryRepository storyRepository, MessageRepository messageRepository, UserRepository userRepository) {
+            this.postRepository = postRepository;
+            this.storyRepository = storyRepository;
+            this.messageRepository = messageRepository;
+            this.userRepository = userRepository;
 
     public String uploadFileAndSaveStory(MultipartFile file,String fullName) throws Exception {
         // Tạo Cloudinary instance với thông tin cấu hình trực tiếp
@@ -73,9 +122,10 @@ public class CloudinaryService {
             return fileUrl;
         } catch (IOException e) {
             throw new IOException("Upload that bai");
+
         }
 
-    }
+
 
     public String uploadFileAndSavePost(MultipartFile file, String caption, String fullName) throws Exception {
         // Tạo Cloudinary instance với thông tin cấu hình trực tiếp
@@ -120,19 +170,18 @@ public class CloudinaryService {
         } catch (IOException e) {
             e.printStackTrace();
             throw new IOException("Upload file thất bại");
+
+
+        // Phương thức chuyển MultipartFile thành File tạm thời
+        public File convertMultipartFileToFile(MultipartFile file) throws Exception {
+            File convFile = new File(file.getOriginalFilename());
+            FileOutputStream fos = new FileOutputStream(convFile);
+            fos.write(file.getBytes());
+            fos.close();
+            return convFile;
         }
+
+
     }
-
-    // Phương thức chuyển MultipartFile thành File tạm thời
-    public File convertMultipartFileToFile(MultipartFile file) throws Exception {
-        File convFile = new File(file.getOriginalFilename());
-        FileOutputStream fos = new FileOutputStream(convFile);
-        fos.write(file.getBytes());
-        fos.close();
-        return convFile;
-    }
-
-
-}
 
 
