@@ -2,10 +2,7 @@ package com.example.demo_app_chat.service;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
-import com.example.demo_app_chat.model.Notifications;
-import com.example.demo_app_chat.model.Post;
-import com.example.demo_app_chat.model.Story;
-import com.example.demo_app_chat.model.UserInfo;
+import com.example.demo_app_chat.model.*;
 import com.example.demo_app_chat.repository.MessageRepository;
 import com.example.demo_app_chat.repository.NotificationRepository;
 import com.example.demo_app_chat.repository.PostRepository;
@@ -19,10 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.Date;
-import java.util.Map;
-import java.util.Random;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class CloudinaryService {
@@ -116,7 +110,7 @@ public class CloudinaryService {
             UserInfo user = UserInfo.builder().userName(fullName).profileImagePath("temp_link").build();
             Post post = Post.builder().user(user).media(fileUrl).caption(caption)
                     .likeCount(1).saveCount(2).isSaved(2).isLike(1).shareCount(2)
-                    .comments(null).build();
+                    .comments(new ArrayList<>()).build();
             postRepository.save(post);
             Notifications notifications=Notifications.builder().id(UUID.randomUUID().toString()).action("New notification at"+new Date()).idUser(new Random().nextInt(1000)).build();
 //            notificationService.save(notifications);
