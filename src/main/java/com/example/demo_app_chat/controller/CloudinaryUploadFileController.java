@@ -1,7 +1,6 @@
 package com.example.demo_app_chat.controller;
 
 import com.example.demo_app_chat.dto.UpdateAvatarDTO;
-import com.example.demo_app_chat.model.Message;
 import com.example.demo_app_chat.service.CloudinaryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

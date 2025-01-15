@@ -2,8 +2,10 @@ package com.example.demo_app_chat.service;
 
 import com.example.demo_app_chat.dto.*;
 import com.example.demo_app_chat.model.EmailVerification;
+import com.example.demo_app_chat.model.Post;
 import com.example.demo_app_chat.model.User;
 import com.example.demo_app_chat.repository.EmailVerifycationRepository;
+import com.example.demo_app_chat.repository.PostRepository;
 import com.example.demo_app_chat.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,6 +24,9 @@ public class UserService {
     EmailVerifycationService emailVerifycationService;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private PostRepository postRepository;
+
     public User updateFollowingCount(String userId, int count, String action) {
         // Lấy User từ ID
         User user = getUserById(userId);
@@ -52,20 +57,22 @@ public class UserService {
     }
 
 
-
-    public List<User> getAllUsers(){
+    public List<User> getAllUsers() {
         return userRepository.findAll();
     }
-    public User findUser(String user,String password){
-        return userRepository.findByUsernameAndPassword(user,password);
+
+    public User findUser(String user, String password) {
+        return userRepository.findByUsernameAndPassword(user, password);
     }
+
     public boolean findUserByUserName(String userName) {
         User user = userRepository.findByUsername(userName);
         return user != null; // Trả về true nếu tìm thấy, false nếu không
     }
+
     public boolean findUserByEmail(String email) {
         User user = userRepository.findByEmail(email);
-        return user!= null; // Trả về true nếu tìm thấy, false nếu không
+        return user != null; // Trả về true nếu tìm thấy, false nếu không
     }
 
     public User saveUser(SignUpDTO userDTO) {
@@ -81,7 +88,15 @@ public class UserService {
                 .password(userDTO.getPassword())
                 .email(userDTO.getEmail())
                 .fullName(userDTO.getFullName())
-                .build();
+                .friends(new ArrayList<>()).
+                followers(new ArrayList<>()).
+                following(new ArrayList<>()).
+                posts_saved(new ArrayList<>()).
+                posts_shared(new ArrayList<>()).
+                status(1).
+                profileImagePath("http://res.cloudinary.com/dllqdawgo/image/upload/v1733890325/test.jpg").
+                followersCount(0).followingCount(0).
+                build();
 
         return userRepository.save(user); // Lưu user vào cơ sở dữ liệu
     }
@@ -89,6 +104,7 @@ public class UserService {
     public User getUserById(String id) {
         return (User) userRepository.findById(id).orElse(null);
     }
+
     public boolean updateUser(UpdateUserDTO updateUserDTO) {
         // Tìm người dùng theo ID
         Optional<User> optionalUser = userRepository.findById(updateUserDTO.getId());
@@ -113,17 +129,21 @@ public class UserService {
     }
 
     public boolean sendCode(String code) {
-return false;
-}
-public boolean resetPassword(ForgotPasswordDTO forgotPasswordDTO){
         return false;
     }
+
+    public boolean resetPassword(ForgotPasswordDTO forgotPasswordDTO) {
+        return false;
+    }
+
     public boolean verifyCode(String code) {
         return false;
     }
+
     public boolean updatePassword(String code, String newPassword) {
         return false;
     }
+
     public boolean changePasswordWithCode(EmailVerifycationDTO emailVerifycationDTO) {
         // Kiểm tra mã xác thực và email
         EmailVerification emailVerification = emailVerifycationRepository.findByEmail(emailVerifycationDTO.getEmail());
@@ -162,5 +182,18 @@ public boolean resetPassword(ForgotPasswordDTO forgotPasswordDTO){
             userDTOList.add(userAdminDTO);
         }
         return userDTOList;
+    }
+
+    public String getUserIdByPostId(String postId) {
+        // Tìm Post theo ID
+        return postRepository.findById(postId)
+                .map(Post::getUser) // Lấy thông tin user từ Post
+                .map(userInfo -> userInfo.getUserName()) // Lấy username từ userInfo
+                .flatMap(username -> {
+                    // Tìm User theo username
+                    User user = userRepository.findByUsername(username);
+                    return user != null ? java.util.Optional.of(user.getId()) : java.util.Optional.empty();
+                })
+                .orElse(null); // Trả về null nếu không tìm thấy
     }
 }

@@ -63,7 +63,7 @@ public class WebSocketClientApp {
         // Kết nối WebSocket
         clientApp.connect();
         // Gửi thông báo
-        Notifications notification = new Notifications("11", "67663e3c193e9c2bb63191be", "ccccc");
+        Notifications notification = new Notifications("11", "67876f5efd8b3029ca6c6504", "ccccc");
         clientApp.sendNotification(notification);
 
         Notifications anotherNotification = new Notifications("12", "675e6e12324f75314d7fb41b", "ok em ");

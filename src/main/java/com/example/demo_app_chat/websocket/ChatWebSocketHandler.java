@@ -43,6 +43,35 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
             System.out.println("User " + username + " connected");
         }
     }
+//    @Override
+//    protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
+//        // Lấy username từ attributes của session
+//        String username = (String) session.getAttributes().get("username");
+//
+//        if (username != null) {
+//            // Lấy nội dung tin nhắn
+//            String msgContent = message.getPayload();
+//            System.out.println("Received message from " + username + ": " + msgContent);
+//
+//            // Chuyển đổi tin nhắn JSON sang đối tượng Messages
+//            ObjectMapper objectMapper = new ObjectMapper();
+//            Messages getMessage = objectMapper.readValue(msgContent, Messages.class);
+//            //Map luu tru du lieu cua json
+//            Map<String,Object> convertJSON=objectMapper.convertValue(getMessage, Map.class);
+//            String userNameReceiver=convertJSON.get("fullNameReceiver").toString();
+//            // Lặp qua tất cả các session và gửi tin nhắn
+//            for (Map.Entry<UserSession, WebSocketSession> entry : userSessions.entrySet()) {
+//                    if(entry.getKey().getUsername().equals(userNameReceiver)) {
+//                        messageService.save(getMessage);
+//                        entry.getValue().sendMessage(new TextMessage(msgContent));
+//                    }else{
+//                        messageService.save(getMessage);
+//                }
+//                    break;
+//            }
+//        }
+//    }
+
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
         // Lấy username từ attributes của session
@@ -56,18 +85,24 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
             // Chuyển đổi tin nhắn JSON sang đối tượng Messages
             ObjectMapper objectMapper = new ObjectMapper();
             Messages getMessage = objectMapper.readValue(msgContent, Messages.class);
-            //Map luu tru du lieu cua json
-            Map<String,Object> convertJSON=objectMapper.convertValue(getMessage, Map.class);
-            String userNameReceiver=convertJSON.get("fullNameReceiver").toString();
-            // Lặp qua tất cả các session và gửi tin nhắn
+
+            // Map lưu trữ dữ liệu của JSON
+            Map<String, Object> convertJSON = objectMapper.convertValue(getMessage, Map.class);
+            String userNameReceiver = convertJSON.get("fullNameReceiver").toString();
+
+            // Lưu tin nhắn vào cơ sở dữ liệu
+            messageService.save(getMessage);
+
+            // Gửi tin nhắn tới người nhận
             for (Map.Entry<UserSession, WebSocketSession> entry : userSessions.entrySet()) {
-                    if(entry.getKey().getUsername().equals(userNameReceiver)) {
-                        messageService.save(getMessage);
-                        entry.getValue().sendMessage(new TextMessage(msgContent));
-                    }else{
-                        messageService.save(getMessage);
+                String currentUser = entry.getKey().getUsername();
+                if (currentUser.equals(userNameReceiver)) {
+                    // Gửi tin nhắn tới người nhận
+                    entry.getValue().sendMessage(new TextMessage(msgContent));
+                } else if (currentUser.equals(username)) {
+                    // Gửi tin nhắn xác nhận tới người gửi nếu cần
+                    entry.getValue().sendMessage(new TextMessage("{\"status\": \"sent\"}"));
                 }
-                    break;
             }
         }
     }

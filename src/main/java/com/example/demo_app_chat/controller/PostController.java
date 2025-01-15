@@ -2,9 +2,11 @@ package com.example.demo_app_chat.controller;
 
 import com.example.demo_app_chat.dto.UpdatePostRequest;
 import com.example.demo_app_chat.model.Comment;
+import com.example.demo_app_chat.model.Notifications;
 import com.example.demo_app_chat.model.Post;
 import com.example.demo_app_chat.repository.PostRepository;
 import com.example.demo_app_chat.service.PostService;
+import com.example.demo_app_chat.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,7 +21,8 @@ public class PostController {
     private PostService postService;
     @Autowired
     private PostRepository postRepository;
-
+    @Autowired
+    private UserService userService;
     @GetMapping("/getpost")
     public List<Post> getPost() {
         return postService.getAllPosts();
@@ -30,40 +33,31 @@ public class PostController {
         return ResponseEntity.ok(post);
     }
 
-    @PutMapping("/get/updateLike/{id}")
+    @PutMapping("/get/takeLike/{id}")
     public ResponseEntity<Post> updatePost(@PathVariable String id, @RequestBody UpdatePostRequest request) {
         // Lấy bài viết theo ID từ repository
         Optional<Post> postOptional = postRepository.findById(id);
 
         if (postOptional.isEmpty()) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.notFound().build(); // Trả về 404 nếu bài viết không tồn tại
         }
+
         Post post = postOptional.get();
 
         // Cập nhật trạng thái Like
-        if (request.getIsLike() != 0) {
+        if (request.getIsLike() != 0) { // Kiểm tra giá trị không
             if (request.getIsLike() == 1) {
-                postOptional.get().setLikeCount(postOptional.get().getLikeCount() + 1); // Tăng số lượng Like
+                post.setLikeCount(post.getLikeCount() + 1); // Tăng số lượng Like
             } else if (request.getIsLike() == 0) {
-                postOptional.get().setLikeCount(postOptional.get().getLikeCount() - 1); // Giảm số lượng Like
+                post.setLikeCount(post.getLikeCount() - 1); // Giảm số lượng Like
             }
-            postOptional.get().setIsLike(request.getIsLike()); // Cập nhật trạng thái Like
-        }
-
-        // Cập nhật trạng thái Save
-        if (request.getIsSaved() != 0) {
-            if (request.getIsSaved() == 1) {
-                postOptional.get().setSaveCount(postOptional.get().getSaveCount() + 1); // Tăng số lượng Save
-            } else if (request.getIsSaved() == 0) {
-                postOptional.get().setSaveCount(postOptional.get().getSaveCount() - 1); // Giảm số lượng Save
-            }
-            postOptional.get().setIsSaved(request.getIsSaved()); // Cập nhật trạng thái Save
+            post.setIsLike(request.getIsLike()); // Cập nhật trạng thái Like
         }
 
         // Lưu thay đổi vào database
         postRepository.save(post);
 
-        // Trả về bài viết đã cập nhật
+        // Trả về bài viết đã được cập nhật
         return ResponseEntity.ok(post);
     }
     @PostMapping("/get/{postId}/comments")
@@ -79,9 +73,17 @@ public class PostController {
         }
         post.getComments().add(comment);
         Post updatedPost = postRepository.save(post);
+        WebSocketClientApp clientApp = new WebSocketClientApp();
+        // Kết nối WebSocket
+        clientApp.connect();
+        // Gửi thông báo
+        Notifications notification = new Notifications("aaa", userService.getUserIdByPostId(postId), comment.getFullName()+"đã comment bài viết của bạn!");
+        clientApp.sendNotification(notification);
+        System.out.println(userService.getUserIdByPostId(postId));
 
         return ResponseEntity.ok(updatedPost);
 
     }
+
 }
 
