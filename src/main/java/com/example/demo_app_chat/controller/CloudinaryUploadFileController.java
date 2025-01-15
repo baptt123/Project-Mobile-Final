@@ -91,7 +91,7 @@ public class CloudinaryUploadFileController {
             // Gọi service để upload ảnh lên Cloudinary và cập nhật avatar
             String fileUrl = cloudinaryService.updateAvatar(updateAvatarDTO, file);
 
-            return ResponseEntity.ok("Cập nhật avatar thành công: " + fileUrl);
+            return ResponseEntity.ok(fileUrl);
         } catch (Exception e) {
             return ResponseEntity.status(500).body("Cập nhật avatar thất bại: " + e.getMessage());
         }

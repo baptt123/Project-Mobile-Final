@@ -80,6 +80,7 @@ public class UserService {
                 .username(userDTO.getUsername())
                 .password(userDTO.getPassword())
                 .email(userDTO.getEmail())
+                .fullName(userDTO.getFullName())
                 .build();
 
         return userRepository.save(user); // Lưu user vào cơ sở dữ liệu
