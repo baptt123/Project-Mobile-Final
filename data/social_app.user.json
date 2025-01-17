@@ -1,0 +1,88 @@
+[{
+  "_id": {
+    "$oid": "67876f5efd8b3029ca6c6504"
+  },
+  "username": "trrung",
+  "password": "1234",
+  "email": "nttan101103@gmail.com",
+  "fullName": "thanh tan",
+  "gender": 0,
+  "followersCount": 150,
+  "followingCount": 200,
+  "status": 1,
+  "profileImagePath": "http://res.cloudinary.com/dllqdawgo/image/upload/v1733890325/test.jpg",
+  "friends": [
+    "67876f5efd8b3029ca6c6506"
+  ],
+  "posts_saved": [],
+  "posts_shared": [],
+  "followers": [],
+  "following": [],
+  "_class": "com.example.demo_app_chat.model.User"
+},
+{
+  "_id": {
+    "$oid": "67876f5efd8b3029ca6c6506"
+  },
+  "username": "alexsmith",
+  "password": "mypassword",
+  "email": "alex.smith@example.com",
+  "fullName": "Alex Smith",
+  "gender": 0,
+  "followersCount": 200,
+  "followingCount": 300,
+  "status": 1,
+  "profileImagePath": "http://res.cloudinary.com/dllqdawgo/image/upload/v1736991303/t%E1%BA%A3i_xu%E1%BB%91ng.jpg",
+  "friends": [
+    "67876f5efd8b3029ca6c6504"
+  ],
+  "posts_saved": [],
+  "posts_shared": [],
+  "followers": [],
+  "following": [
+    "6787e686de9c0e58d8e23595"
+  ],
+  "_class": "com.example.demo_app_chat.model.User"
+},
+{
+  "_id": {
+    "$oid": "6787e686de9c0e58d8e23595"
+  },
+  "username": "nttan101103",
+  "password": "nttan101103",
+  "email": "ngoken102@gmail.com",
+  "fullName": "tan",
+  "gender": 0,
+  "followersCount": 0,
+  "followingCount": 0,
+  "status": 1,
+  "profileImagePath": "http://res.cloudinary.com/dllqdawgo/image/upload/v1733890325/test.jpg",
+  "friends": [],
+  "posts_saved": [],
+  "posts_shared": [],
+  "followers": [
+    "67876f5efd8b3029ca6c6506"
+  ],
+  "following": [],
+  "_class": "com.example.demo_app_chat.model.User"
+},
+{
+  "_id": {
+    "$oid": "6788634eeb98652b9372aa1d"
+  },
+  "username": "tantt121",
+  "password": "tantt121",
+  "email": "nsieu5547@gmail.com",
+  "fullName": "thanh tan",
+  "gender": 0,
+  "followersCount": 0,
+  "followingCount": 0,
+  "status": 1,
+  "profileImagePath": "http://res.cloudinary.com/dllqdawgo/image/upload/v1733890325/test.jpg",
+  "friends": [],
+  "posts_saved": [],
+  "posts_shared": [],
+  "followers": [],
+  "following": [],
+  "_class": "com.example.demo_app_chat.model.User"
+}]
