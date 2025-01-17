@@ -1,0 +1,67 @@
+[{
+  "_id": 4040,
+  "idUser": 9,
+  "imageStory": "http://res.cloudinary.com/dllqdawgo/image/upload/v1734753335/t%E1%BA%A3i_xu%E1%BB%91ng.jpg",
+  "_class": "com.example.demo_app_chat.model.Story"
+},
+{
+  "_id": 5830,
+  "idUser": 8,
+  "imageStory": "http://res.cloudinary.com/dllqdawgo/image/upload/v1733136370/hieuthuhai-6-1724922106140134622997-0-0-994-1897-crop-17249221855301721383554.jpg",
+  "_class": "com.example.demo_app_chat.model.Story"
+},
+{
+  "_id": "af29d4ec-770b-4988-8b31-40cf5995a9ff",
+  "idUser": 5,
+  "imageStory": "http://res.cloudinary.com/dllqdawgo/image/upload/v1733890325/test.jpg",
+  "_class": "com.example.demo_app_chat.model.Story"
+},
+{
+  "_id": "365aeb89-c9ef-4729-b675-79b72b19bc6d",
+  "idUser": 3,
+  "imageStory": "http://res.cloudinary.com/dllqdawgo/image/upload/v1736495255/t%E1%BA%A3i_xu%E1%BB%91ng.jpg",
+  "userName": "hehe",
+  "_class": "com.example.demo_app_chat.model.Story"
+},
+{
+  "_id": "d63c4c5d-674e-495a-8c0f-13e55e1bb038",
+  "idUser": 2,
+  "imageStory": "http://res.cloudinary.com/dllqdawgo/image/upload/v1736927041/t%E1%BA%A3i_xu%E1%BB%91ng.jpg",
+  "fullName": "trungbede",
+  "_class": "com.example.demo_app_chat.model.Story"
+},
+{
+  "_id": "147d03e9-ed61-47ed-9340-989863a89b5f",
+  "idUser": 4,
+  "imageStory": "http://res.cloudinary.com/dllqdawgo/image/upload/v1733890325/test.jpg",
+  "fullName": "John Doe",
+  "_class": "com.example.demo_app_chat.model.Story"
+},
+{
+  "_id": "2b622742-f45f-4007-9557-4ca6305a8289",
+  "idUser": 0,
+  "imageStory": "http://res.cloudinary.com/dllqdawgo/image/upload/v1733136370/hieuthuhai-6-1724922106140134622997-0-0-994-1897-crop-17249221855301721383554.jpg",
+  "fullName": "John Doe",
+  "_class": "com.example.demo_app_chat.model.Story"
+},
+{
+  "_id": "84c83fae-1b6c-4975-bbef-869ddd37293c",
+  "idUser": 9,
+  "imageStory": "http://res.cloudinary.com/dllqdawgo/image/upload/v1733890325/test.jpg",
+  "fullName": "T",
+  "_class": "com.example.demo_app_chat.model.Story"
+},
+{
+  "_id": "d9e2f7c9-fafc-4c44-8aa2-7ef14f22dd40",
+  "idUser": 4,
+  "imageStory": "http://res.cloudinary.com/dllqdawgo/image/upload/v1733136370/hieuthuhai-6-1724922106140134622997-0-0-994-1897-crop-17249221855301721383554.jpg",
+  "fullName": "T",
+  "_class": "com.example.demo_app_chat.model.Story"
+},
+{
+  "_id": "6f316f45-caf7-4901-a3a8-b7ee309e208e",
+  "idUser": 2,
+  "imageStory": "http://res.cloudinary.com/dllqdawgo/image/upload/v1736991303/t%E1%BA%A3i_xu%E1%BB%91ng.jpg",
+  "fullName": "Alex Smith",
+  "_class": "com.example.demo_app_chat.model.Story"
+}]

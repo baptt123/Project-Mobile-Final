@@ -196,4 +196,10 @@ public class UserService {
                 })
                 .orElse(null); // Trả về null nếu không tìm thấy
     }
+    public List<User> searchUsers(String query) {
+        if (query == null || query.isEmpty()) {
+            return new ArrayList<>(); // Trả về danh sách rỗng nếu không có query
+        }
+        return userRepository.findByFullNameRegexOrUsernameRegex(query);
+    }
 }

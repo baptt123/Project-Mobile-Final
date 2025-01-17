@@ -36,6 +36,6 @@ field la nhung truong thuoc tinh can lay
  */
     @Query(value="{}",fields = "{fullName: 1,gender: 1,profileImagePath: 1}")
     List<User> getALlUsersForAdmin();
-
+    List<User> findByFullNameRegexOrUsernameRegex(String query);
 }
 
