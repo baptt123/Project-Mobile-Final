@@ -60,30 +60,48 @@ public class PostController {
         // Trả về bài viết đã được cập nhật
         return ResponseEntity.ok(post);
     }
-    @PostMapping("/get/{postId}/comments")
-    public ResponseEntity<?> getCommentsToPost(@PathVariable String postId, @RequestBody Comment comment) {
+//    @PostMapping("/get/{postId}/comments")
+//    public ResponseEntity<?> getCommentsToPost(@PathVariable String postId, @RequestBody Comment comment) {
+//        Optional<Post> optionalPost = postRepository.findById(postId);
+//        Post post = optionalPost.get();
+//        if (optionalPost.isEmpty()) {
+//            return ResponseEntity.status(404).body("Post not found!");
+//        }
+//
+//        if (comment.getFullName()== null || comment.getText() == null) {
+//            return ResponseEntity.badRequest().body("Fullname and text are required!");
+//        }
+//        post.getComments().add(comment);
+//        Post updatedPost = postRepository.save(post);
+//        WebSocketClientApp clientApp = new WebSocketClientApp();
+//        // Kết nối WebSocket
+//        clientApp.connect();
+//        // Gửi thông báo
+//        Notifications notification = new Notifications("aaa", userService.getUserIdByPostId(postId), comment.getFullName()+"đã comment bài viết của bạn!");
+//        clientApp.sendNotification(notification);
+//        System.out.println(userService.getUserIdByPostId(postId));
+//
+//        return ResponseEntity.ok(updatedPost);
+//
+//    }
+    @PostMapping("/add/{postId}/{newComment}")
+    public ResponseEntity<?> addComments(@PathVariable String postId,@PathVariable String newComment){
         Optional<Post> optionalPost = postRepository.findById(postId);
         Post post = optionalPost.get();
         if (optionalPost.isEmpty()) {
             return ResponseEntity.status(404).body("Post not found!");
         }
-
-        if (comment.getFullName()== null || comment.getText() == null) {
-            return ResponseEntity.badRequest().body("Fullname and text are required!");
-        }
-        post.getComments().add(comment);
-        Post updatedPost = postRepository.save(post);
-        WebSocketClientApp clientApp = new WebSocketClientApp();
-        // Kết nối WebSocket
-        clientApp.connect();
-        // Gửi thông báo
-        Notifications notification = new Notifications("aaa", userService.getUserIdByPostId(postId), comment.getFullName()+"đã comment bài viết của bạn!");
-        clientApp.sendNotification(notification);
-        System.out.println(userService.getUserIdByPostId(postId));
-
-        return ResponseEntity.ok(updatedPost);
+        post.getComments().add(newComment);
+        Post updatePost=postRepository.save(post);
 
     }
+    /*
+    thiết lập link và kiểu dữ liệu nhận của sse
 
+     */
+//    @GetMapping("")
+//    public Flux<String> pushNotifcation(){
+//
+//    }
 }
 
